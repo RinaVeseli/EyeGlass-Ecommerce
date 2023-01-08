@@ -1,0 +1,20 @@
+[
+  {
+    "name": " Kits",
+    "founded": "2021-01-05, 10:00",
+    "products": ["Eyeglasses, lenses"],
+    "createdIn": "France"
+  },
+  {
+    "name": " Polo",
+    "founded": "2021-01-05, 10:00",
+    "products": ["Eyeglasses, lenses"],
+    "createdIn": "Italy"
+  },
+  {
+    "name": "Lauren",
+    "founded": "2021-01-05, 10:00",
+    "products": ["Eyeglasses, lenses"],
+    "createdIn": "Germany"
+  }
+]

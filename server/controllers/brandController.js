@@ -1,110 +1,87 @@
 const Brand = require('./../model/brandModel');
 const APIFeatures = require('./../utils/apiFeatures');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 // exports.aliasTopBrand = (req, res, next) => {
 //   req.query.limit = '5';
 //   req.query.sort= '-ratingAverage,price';
 //   req.query.field='name,price,ratingAverage,summary,difficulty';
 // };
 
-exports.getAllBrands = async (req, res) => {
-  try {
-    //Excecute Query
-    const features = new APIFeatures(Brand.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const brands = await features.query;
-    //Send Response
-    res.status(200).json({
-      status: 'OK',
-      results: brands.length,
-      data: {
-        brands,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
-  }
-};
+exports.getAllBrands = catchAsync(async (req, res, next) => {
+  //Excecute Query
+  const features = new APIFeatures(Brand.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const brands = await features.query;
+  //Send Response
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      brands,
+    },
+  });
+});
 
-exports.getBrand = async (req, res) => {
-  try {
-    const brand = await Brand.findById(req.params.id);
-    // Brand.findOne({_id: req.params.id})
-    res.status(200).json({
-      status: 'OK',
-      data: {
-        brand,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
-  }
-};
+exports.getBrand = catchAsync(async (req, res, next) => {
+  const brand = await Brand.findById(req.params.id);
+  // Tour.findOne({ _id: req.params.id })
 
-exports.createBrand = async (req, res) => {
-  try {
-    const newBrand = await Brand.create(req.body);
-
-    res.status(201).json({
-      status: 'OK',
-      data: {
-        brands: newBrand,
-      },
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: 'fail',
-      message: error,
-    });
+  if (!brand) {
+    return next(new AppError('No brand found with that ID', 404));
   }
-};
 
-exports.updateBrand = async (req, res) => {
-  try {
-    const brand = await Brand.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+  res.status(200).json({
+    status: 'success',
+    data: {
+      brand,
+    },
+  });
+});
 
-    res.status(200).json({
-      status: 'Ok',
-      data: {
-        brand,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
+exports.createBrand = catchAsync(async (req, res, next) => {
+  const newBrand = await Brand.create(req.body);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      brands: newBrand,
+    },
+  });
+});
+
+exports.updateBrand = catchAsync(async (req, res, next) => {
+  const brand = await Brand.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  if (!brand) {
+    return next(new AppError('No brand found with that ID', 404));
   }
-};
-exports.deleteBrand = async (req, res) => {
-  try {
-    await Brand.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: 'OK',
-      data: null,
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: error,
-    });
+  res.status(200).json({
+    status: 'success',
+    data: {
+      brand,
+    },
+  });
+});
+exports.deleteBrand = catchAsync(async (req, res, next) => {
+  const brand = await Brand.findByIdAndDelete(req.params.id);
+  if (!brand) {
+    return next(new AppError('No brand found with that ID', 404));
   }
-};
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
 // ----------PIPELINE-----------------averagerating avgprice min max price
 // exports.getBrandStats = async (req, res) => {
 //   try {

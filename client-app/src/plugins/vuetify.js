@@ -1,10 +1,26 @@
+// Styles
 import '@mdi/font/css/materialdesignicons.css';
-import 'vuetify/lib/styles/main.sass';
+import 'vuetify/styles';
+import { aliases, mdi, fa } from 'vuetify/iconsets/mdi';
+import colors from 'vuetify/lib/util/colors'
 import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/lib/components';
-import * as directives from 'vuetify/lib/directives';
 
 export default createVuetify({
-  components,
-  directives,
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      fa,
+      mdi,
+    },
+  },theme: {
+    themes: {
+      light: {
+        primary: colors.red.darken1, // #E53935
+        secondary: colors.red.lighten4, // #FFCDD2
+        accent: colors.indigo.base, // #3F51B5
+      },
+    },
+  },
 });
+// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <div class="field">
       <label class="label">Name</label>
@@ -51,8 +51,58 @@
       </button>
     </div>
   </div>
+</template> -->
+<template>
+  <v-form>
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            v-model="name"
+            label="Name"
+            persistent-hint
+            variant="solo"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            v-model="founded"
+            label="Founded"
+            hint="yyyy/mm/dd"
+            persistent-hint
+            variant="solo"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            v-model="products"
+            label="Products"
+            persistent-hint
+            variant="solo"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-text-field
+            v-model="createdIn"
+            label="CreatedIn"
+            persistent-hint
+            variant="solo"
+          ></v-text-field>
+        </v-col> </v-row
+      ><v-btn color="white" class="mr-4"
+        ><router-link
+          class="text-black"
+          :to="{ name: `Home` }"
+          color="white"
+        >
+          Cancel
+        </router-link></v-btn
+      ><v-btn @click="updateProduct" color="light-blue lighten-3">
+        Update
+      </v-btn>
+    </v-container>
+  </v-form>
 </template>
-
 <script>
 // import axios
 import axios from 'axios';

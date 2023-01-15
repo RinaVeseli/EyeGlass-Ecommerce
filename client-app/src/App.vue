@@ -1,6 +1,10 @@
 <template>
-  <Header />
-  <router-view />
+  <v-app>
+    <v-main>
+      <Header />
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -13,7 +17,7 @@ export default {
   },
 };
 </script>
-
+<!-- 
 <style>
 * {
   margin: 0;
@@ -31,4 +35,4 @@ body {
   box-sizing: border-box;
   font-size: 1.6rem;
 }
-</style>
+</style> -->

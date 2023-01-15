@@ -19,7 +19,7 @@ exports.getAllBrands = catchAsync(async (req, res, next) => {
   //Send Response
   res.status(200).json({
     status: 'success',
-    results: tours.length,
+    results: brands.length,
     data: {
       brands,
     },

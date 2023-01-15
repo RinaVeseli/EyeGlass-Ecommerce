@@ -44,6 +44,7 @@ const routes = [
         /* webpackChunkName: "Edit" */ '../components/brands/EditBrand.vue'
       ),
   },
+
   // {
   //   path: '/register',
   //   name: 'register',

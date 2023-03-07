@@ -25,10 +25,9 @@ class APIFeatures {
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
     } else {
-      // query = query.sort('-createdAt'); sipas kohes qe e ki kriju tdhanen
-
       this.query = this.query.sort('-createdAt');
     }
+
     return this;
   }
   limitFields() {

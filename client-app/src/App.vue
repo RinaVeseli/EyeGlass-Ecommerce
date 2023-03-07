@@ -2,23 +2,27 @@
   <v-app>
     <v-main>
       <Header />
+
       <router-view />
+      <Footer />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import Header from './components/Header';
-
+import Header from './components/Common/Header.vue';
+import Footer from './components/Common/Footer';
+// import topHeader from './components/Top-Header.vue';
 export default {
   name: 'App',
   components: {
     Header,
+    Footer,
   },
 };
 </script>
-<!-- 
-<style>
+
+<!-- <style>
 * {
   margin: 0;
   padding: 0;

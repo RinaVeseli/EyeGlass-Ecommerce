@@ -1,7 +1,8 @@
 const express = require('express');
 const brandController = require('./../controllers/brandController');
 const router = express.Router();
-
+const userController = require('../controllers/userController');
+const { isAdmin } = require('../middleware/auth');
 //for price at glasses price
 
 // router.route('/brand-stats').get(brandController.getBrandStats);
@@ -12,7 +13,7 @@ const router = express.Router();
 router
   .route('/')
   .get(brandController.getAllBrands)
-  .post(brandController.createBrand);
+  .post(isAdmin, brandController.createBrand);
 
 router
   .route('/:id')

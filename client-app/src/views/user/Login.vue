@@ -52,7 +52,7 @@
   ><Footer />
 </template>
 <script>
-import firebase from 'firebase/compat/app';
+import {signInWithEmailAndPassword, getAuth} from 'firebase/auth';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import Footer from '../../components/Common/Footer.vue';
@@ -90,17 +90,21 @@ export default {
       }
     },
 
-    pressed() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then((data) => {
-          console.log(data);
-          this.$router.replace({ path: '/' });
-        })
-        .catch((error) => {
-          this.error = error;
-        });
+    async pressed() {
+      try {
+        await signInWithEmailAndPassword(getAuth(), this.email, this.password);
+        this.$router.replace({ path: '/' });
+      } catch (error) {
+        this.error = error;
+      }
+      // await signInWithEmailAndPassword(this.email, this.password)
+      //   .then((data) => {
+      //     console.log(data);
+      //     this.$router.replace({ path: '/' });
+      //   })
+      //   .catch((error) => {
+      //     this.error = error;
+      //   });
     },
   },
 };

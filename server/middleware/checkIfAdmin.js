@@ -1,0 +1,19 @@
+const admin = require("../services/firebase");
+
+const checkIfAdmin = async (req, res, next) => {
+  const {authToken} = req;
+  try {
+    const user = await admin.auth().verifyIdToken(authToken);
+  } catch (err) {
+    return res.status(401).json({message: "Cannot verify right now"});
+  }
+
+  if (user.admin) {
+    req.authId = user.uid;
+  } else {
+    return res.status(403).json({message: "Not an admin"});
+  }
+  next();
+};
+
+module.exports = checkIfAdmin;

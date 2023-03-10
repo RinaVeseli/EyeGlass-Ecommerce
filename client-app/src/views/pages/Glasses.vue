@@ -1,4 +1,9 @@
 <template>
+  <Header />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
   <div class="mainDiv">
     <section class="glasseslist">
       <div class="sidebar-accordion">
@@ -47,9 +52,9 @@
 
       <div class="product-list">
         <GlassCard
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
+          v-for="data in items"
+          :key="data._id"
+          :data="data"
           @add-to-cart="addToCart"
         ></GlassCard>
       </div>
@@ -63,54 +68,22 @@
       </div>
     </section>
   </div>
+  <Footer />
 </template>
 <script>
 import GlassCard from '../../components/GlassCard.vue';
-
+import axios from 'axios';
+import Footer from '../../components/Common/Footer.vue';
+import Header from '../../components/Common/Header.vue';
 export default {
+  components: {
+    GlassCard,
+    Header,
+    Footer,
+  },
   data() {
     return {
-      components: {
-        GlassCard,
-      },
-      products: [
-        {
-          id: 1,
-          name: 'Product 1',
-          photo: 'https://via.placeholder.com/200x150',
-          price: '$10.00',
-        },
-        {
-          id: 2,
-          name: 'Product 2',
-          photo: 'https://via.placeholder.com/200x150',
-          price: '$15.00',
-        },
-        {
-          id: 3,
-          name: 'Product 3',
-          photo: 'https://via.placeholder.com/200x150',
-          price: '$20.00',
-        },
-        {
-          id: 3,
-          name: 'Product 3',
-          photo: 'https://via.placeholder.com/200x150',
-          price: '$20.00',
-        },
-        {
-          id: 3,
-          name: 'Product 3',
-          photo: 'https://via.placeholder.com/200x150',
-          price: '$20.00',
-        },
-        {
-          id: 3,
-          name: 'Product 3',
-          photo: 'https://via.placeholder.com/200x150',
-          price: '$20.00',
-        },
-      ],
+      items: [],
       cartItems: [],
       activeAccordion: null,
       filters: [
@@ -161,7 +134,9 @@ export default {
       });
     },
   },
-
+  created() {
+    this.getProducts();
+  },
   methods: {
     toggleAccordion(id) {
       this.activeAccordion = this.activeAccordion === id ? null : id;
@@ -169,8 +144,21 @@ export default {
     addToCart(product) {
       this.cartItems.push(product);
     },
+    async getProducts() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/eyeGlasses'
+        );
+
+        this.items = response.data.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
-  components: { GlassCard },
+  mounted() {
+    this.getProducts();
+  },
 };
 </script>
 <style>
@@ -228,27 +216,29 @@ label {
 
 /* The glasseslist */
 .glasseslist {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .glasses-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 450px;
+  width: 31.3%;
   margin: 20px;
-  border: 1px solid #ccc;
+
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
 
-.glasses-card img {
-  width: 400px;
-  height: auto;
+.product-card img {
+  width: 100%;
+  max-width: 307px;
+  height: 153.8px;
   margin-bottom: 10px;
+  object-fit: cover;
 }
 
 .card-info {
@@ -275,15 +265,12 @@ label {
   justify-content: space-between;
 }
 .product-card {
-  width: 350px;
-  height: 460px;
-  border: 1px solid #ccc;
+  width: 31.3%;
   padding: 10px;
   margin: 10px;
   text-align: center;
 }
 button {
-  background-color: #4caf50;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -298,10 +285,9 @@ button {
 /* Media queries */
 @media only screen and (max-width: 767px) {
   .sidebar-accordion {
-    margin-top: 20px;
     width: 100%;
     padding: 20px;
-    border-right: 1px solid #ccc;
+    border-right: none;
   }
 
   .accordion-item {
@@ -316,17 +302,69 @@ button {
   }
 
   .accordion-header span {
-    font-size: 16px;
+    font-size: 18px;
+    padding-right: 10px;
   }
 
   .accordion-body {
     padding: 20px;
   }
+  .product-card {
+    width: 100%;
+    margin: 20px 0;
+  }
+  .card-info h2 {
+    font-size: 18px;
+    margin-top: 10px;
+  }
 
   .glasses-card {
-    width: 10%;
+    width: 50%;
     margin: 0 0 20px 0;
     border-radius: 0;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .mainDiv {
+    flex-direction: column;
+  }
+  .sidebar-accordion {
+    width: 100%;
+    border-right: none;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .glasses-card {
+    width: 45%;
+    margin: 20px 10px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .sidebar-accordion h1 {
+    margin-top: 30px;
+  }
+  .topPhoto img {
+    display: none !important;
+  }
+  .glasses-card {
+    width: 100%;
+  }
+  .sidebar-accordion {
+    padding: 10px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .glasses-card {
+    width: 100%;
+    height: auto;
+  }
+  .topPhoto img {
+    height: auto;
+  }
+  .product-card img {
+    height: auto;
   }
 }
 </style>

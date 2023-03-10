@@ -1,23 +1,5 @@
-<!-- <template>
-  <div>
-    <h3>Login</h3>
-    <form @submit.prevent="pressed">
-      <div class="login">
-        <input type="text" placeholder="login" v-model="email" />
-      </div>
-      <div class="password">
-        <input
-          type="password"
-          placeholder="password"
-          v-model="password"
-        />
-      </div>
-      <button>Login</button>
-    </form>
-    <div class="error" v-if="error">{{ error.message }}</div>
-  </div>
-</template> -->
 <template>
+  <Header />
   <v-app>
     <div class="backgruond"></div>
     <v-main class="d-flex justify-center mt-2">
@@ -66,14 +48,17 @@
           </v-form>
         </v-card>
       </v-col>
-    </v-main>
-  </v-app>
+    </v-main> </v-app
+  ><Footer />
 </template>
 <script>
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import Footer from '../../components/Common/Footer.vue';
+import Header from '../../components/Common/Header.vue';
 export default {
+  components: { Header, Footer },
   data() {
     return {
       loading: false,

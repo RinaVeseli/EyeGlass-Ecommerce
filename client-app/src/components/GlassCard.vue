@@ -1,23 +1,58 @@
 <template>
+  <router-view></router-view>
+
   <div class="product-card">
-    <img :src="product.photo" alt="Product Photo" />
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.price }}</p>
-    <button @click="addToCart">Add to Cart</button>
+    <router-link
+      :to="{
+        name: 'glasses-details',
+        params: { _id: data._id },
+      }"
+    >
+      <img
+        :src="
+          'http://localhost:3000/img/eyeglasses/' + data.imageCover
+        "
+        alt="Product Photo"
+    /></router-link>
+    <div class="info">
+      <div class="nameFavo d-flex">
+        <h3>Brand | {{ data.name }}</h3>
+
+        <button @click="addToCart">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+      </div>
+      <router-link
+        :to="{
+          name: 'glasses-details',
+          params: { _id: data._id },
+        }"
+      >
+        <div class="priceFrame d-flex">
+          <p>US ${{ data.price }}</p>
+          <p>
+            <i class="fa-solid fa-ruler-horizontal"></i>
+            {{ data.frameSize }}
+          </p>
+        </div>
+      </router-link>
+      <button class="shopNow">Shop Now</button>
+    </div>
   </div>
 </template>
 
 <script>
+// import { faHeart } from '@fortawesome/free-solid-svg-icons';
 export default {
   props: {
-    product: {
+    data: {
       type: Object,
       required: true,
     },
   },
   methods: {
     addToCart() {
-      this.$emit('add-to-cart', this.product);
+      this.$emit('add-to-cart', this.data);
     },
   },
 };
@@ -25,14 +60,20 @@ export default {
 
 <style>
 .product-card {
-  border: 1px solid #ccc;
+  height: 450px;
   padding: 10px;
   margin: 10px;
   text-align: center;
 }
+
+.product-card:hover {
+  border-radius: 10px;
+  box-shadow: -1px -1px 23px -5px rgba(0, 0, 0, 0.75);
+  transition: all 0.2s ease-in-out;
+}
 .product-card img {
   width: 100%;
-  max-width: 200px;
+  max-width: 100%;
   height: auto;
   margin-bottom: 10px;
 }
@@ -45,13 +86,29 @@ export default {
   margin-bottom: 10px;
 }
 .product-card button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
+  color: black;
+  /* border: none; */
+  /* padding: 5px 10px; */
   cursor: pointer;
 }
-.product-card button:hover {
-  background-color: #0069d9;
+
+.nameFavo,
+.priceFrame {
+  padding: 0px 50px;
+  justify-content: space-between;
+}
+.nameFavo {
+  margin-top: 20px;
+}
+i {
+  color: rgb(80, 80, 80);
+  font-size: 22px;
+  align-items: center;
+  text-align: center;
+}
+.shopNow {
+  margin-top: 50px;
+  border: solid black 1px;
+  color: black;
 }
 </style>

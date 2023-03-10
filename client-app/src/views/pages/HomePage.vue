@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <section class="hero">
     <div class="newhero">
       <div class="heroes">
@@ -398,16 +399,17 @@
   </section>
   <OrderIn3Step />
 
-  <FAQVIEW />
+  <FAQVIEW /> <Footer />
 </template>
 
 <script>
 import FAQVIEW from '../../components/FAQView.vue';
 import OrderIn3Step from '../../components/OrderIn3Steps.vue';
-
+import Footer from '../../components/Common/Footer.vue';
+import Header from '../../components/Common/Header.vue';
 export default {
   name: 'HomePage',
-  components: { FAQVIEW, OrderIn3Step },
+  components: { FAQVIEW, OrderIn3Step, Header, Footer },
 };
 </script>
 

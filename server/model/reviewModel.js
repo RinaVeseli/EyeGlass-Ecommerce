@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const reviewSchema = new mongoose.Schema(
+const reviewSchema = new Schema(
   {
     review: {
       type: String,
-      required: [true, 'Review can not be empty!'],
+      // required: [true, 'Review can not be empty!'],
     },
     rating: {
       type: Number,
@@ -16,14 +17,13 @@ const reviewSchema = new mongoose.Schema(
       default: Date.now,
     },
     eyeglasses: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: 'EyeGlasses',
-      required: [true, 'Review must belong to a eyeglasses'],
+      // required: [true, 'Review must belong to a eyeglasses'],
     },
-    user: {s
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'Review must belong to a user'],
     },
   },
   {

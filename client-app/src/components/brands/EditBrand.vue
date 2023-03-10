@@ -1,60 +1,9 @@
-<!-- <template>
-  <div>
-    <div class="field">
-      <label class="label">Name</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="Product Name"
-          v-model="name"
-        />
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">founded</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="founded"
-          v-model="founded"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">products</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="products"
-          v-model="products"
-        />
-      </div>
-    </div>
-    <div class="field">
-      <label class="label">createdIn</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="createdIn"
-          v-model="createdIn"
-        />
-      </div>
-    </div>
-    <div class="control">
-      <button class="button is-success" @click="updateProduct">
-        UPDATE
-      </button>
-    </div>
-  </div>
-</template> -->
 <template>
   <v-form>
     <v-container>
+      <div class="title">
+        <h1>Edit Brand</h1>
+      </div>
       <v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -92,7 +41,7 @@
       ><v-btn color="white" class="mr-4"
         ><router-link
           class="text-black"
-          :to="{ name: `Home` }"
+          :to="{ name: `Dashboard` }"
           color="white"
         >
           Cancel
@@ -167,3 +116,19 @@ export default {
   },
 };
 </script>
+<style>
+.title h1 {
+  font-size: 33px;
+  font-weight: 500;
+}
+.title {
+  margin-bottom: 20px;
+}
+
+.v-container {
+  padding: 60px;
+  width: 80%;
+  float: center;
+  justify-content: space-between;
+}
+</style>

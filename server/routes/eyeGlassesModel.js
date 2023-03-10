@@ -16,12 +16,20 @@ router
 router
   .route('/')
   .get(eyeGlassesController.getAllEyeGlasses)
-  .post(eyeGlassesController.createEyeGlass);
+  .post(
+    eyeGlassesController.uploadEyeglassesImages,
+    eyeGlassesController.resizeEyeglassesImages,
+    eyeGlassesController.createEyeGlass
+  );
 
 router
   .route('/:id')
   .get(eyeGlassesController.getEyeGlass)
-  .patch(eyeGlassesController.updateEyeGlass)
+  .patch(
+    eyeGlassesController.uploadEyeglassesImages,
+    eyeGlassesController.resizeEyeglassesImages,
+    eyeGlassesController.updateEyeGlass
+  )
   .delete(eyeGlassesController.deleteEyeGlass);
 
 module.exports = router;

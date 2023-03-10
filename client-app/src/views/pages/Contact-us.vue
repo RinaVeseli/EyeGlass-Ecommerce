@@ -1,4 +1,5 @@
 <template>
+  <Header />
   <section>
     <div class="master-wrap">
       <v-container>
@@ -8,7 +9,7 @@
   </section>
   <section>
     <v-form class="v-form1">
-      <h1>contact-us</h1>
+      <h1 class="contact-form">contact-us</h1>
       <v-row class="v-row1">
         <v-col cols="12" sm="6">
           <v-text-field
@@ -20,7 +21,7 @@
         </v-col>
         <v-col cols="12" sm="6">
           <v-text-field
-            v-model="founded"
+            v-model="number"
             label="Contact number"
             persistent-hint
             variant="solo"
@@ -28,7 +29,7 @@
         </v-col>
         <v-col cols="12" sm="12" class="v-email">
           <v-text-field
-            v-model="products"
+            v-model="email"
             label="Enter your email address"
             persistent-hint
             variant="solo"
@@ -43,6 +44,7 @@
         variant="solo"
       ></v-autocomplete>
       <v-textarea
+        v-model="enquiry"
         clearable
         label="Enquiry"
         variant="solo"
@@ -52,11 +54,47 @@
       </div>
     </v-form>
   </section>
+  <Footer />
 </template>
 <script>
+// import axios
+import axios from 'axios';
+import Footer from '../../components/Common/Footer.vue';
+import Header from '../../components/Common/Header.vue';
 export default {
-  data: function () {
-    return {};
+  name: 'AddContact',
+  components: {
+    Header,
+    Footer,
+  },
+  data() {
+    return {
+      name: '',
+      number: '',
+      email: '',
+      enquiry: '',
+    };
+  },
+  methods: {
+    // Create New product
+    async saveProduct() {
+      try {
+        await axios.post('http://localhost:3000/api/v1/contact', {
+          name: this.name,
+          number: this.number,
+          email: this.email,
+          enquiry: this.enquiry,
+          createdAt: Date.now(),
+        });
+        this.name = '';
+        this.number = '';
+        this.email = '';
+        this.enquiry = '';
+        this.$router.push('/');
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 };
 </script>
@@ -98,7 +136,7 @@ html .master-wrapper-page .page-title {
 @media (min-width: 1201px) {
   .page-title h1 {
     margin-top: 220px;
-
+    font-size: 30px;
     font-weight: 700;
     line-height: 46px;
   }
@@ -129,5 +167,15 @@ html .master-wrapper-page .page-title {
   font-size: large;
   color: white;
   background-color: #0071bc;
+}
+@media only screen and (min-width: 467px) {
+  .contact-form h1 {
+    text-align: center;
+    padding-bottom: 50px;
+    font-size: 30px;
+    text-transform: uppercase;
+    color: #0071bc;
+    font-weight: 700;
+  }
 }
 </style>

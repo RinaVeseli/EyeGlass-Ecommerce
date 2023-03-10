@@ -44,13 +44,13 @@ const eyeGlassesSchema = new mongoose.Schema({
   },
   priceDiscount: {
     type: Number,
-    validate: {
-      validator: function (val) {
-        return val < this.price;
-      },
-      message:
-        'Discount price ({VALUE}) should be below regular price',
-    },
+    // validate: {
+    //   validator: function (val) {
+    //     return val < this.price;
+    //   },
+    //   message:
+    //     'Discount price ({VALUE}) should be below regular price',
+    // },
   },
   description: {
     type: String,
@@ -66,7 +66,6 @@ const eyeGlassesSchema = new mongoose.Schema({
     default: Date.now(),
     select: false,
   },
-  
 });
 const EyeGlasses = mongoose.model('EyeGlasses', eyeGlassesSchema);
 

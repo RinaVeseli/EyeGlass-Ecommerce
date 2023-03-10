@@ -98,8 +98,12 @@
   </v-form>
 </template> -->
 <template>
-  <v-form>
+  <v-form class="p-6">
     <v-container>
+      <div class="title">
+        <h1>Create new Brand</h1>
+      </div>
+
       <v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -137,7 +141,7 @@
       ><v-btn color="white" class="mr-4"
         ><router-link
           class="text-black"
-          :to="{ name: `Home` }"
+          :to="{ name: `Dashboard` }"
           color="white"
         >
           Cancel
@@ -187,3 +191,19 @@ export default {
   },
 };
 </script>
+<style>
+.title h1 {
+  font-size: 33px;
+  font-weight: 500;
+}
+.title {
+  margin-bottom: 20px;
+}
+
+.v-container {
+  padding: 60px;
+  width: 80%;
+  float: center;
+  justify-content: space-between;
+}
+</style>

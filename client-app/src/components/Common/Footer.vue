@@ -147,19 +147,6 @@ export default {
   data: function () {
     return {
       logo: logo,
-
-      //   navigationItems: [
-      //     { path: '/', name: 'HOME' },
-      //     { path: '/autoship', name: 'AUTOSHIP' },
-      //     { path: '/contacts', name: 'CONTACTS' },
-      //     { path: '/glasses', name: 'GLASSES' },
-      //     { path: '/sunglasses', name: 'SUNGLASSES' },
-      //     { path: '/about', name: 'ABOUT' },
-      //     { path: '/login', name: 'LOGIN' },
-      //     { path: '/register', name: 'REGISTER' },
-      //     // { path: '/edit', name: 'Edit' },
-      //     { path: '/create', name: 'CREATE' },
-      //   ],
     };
   },
 };
@@ -213,7 +200,6 @@ textarea {
 }
 .footer {
   background: #f7f7f7;
-  padding: 4rem 9%;
 }
 .footer .news-letter {
   text-align: center;
@@ -317,7 +303,7 @@ textarea {
   }
 }
 .footerBbox img {
-  width: 350px;
+  width: 250px;
   height: auto;
 }
 </style>

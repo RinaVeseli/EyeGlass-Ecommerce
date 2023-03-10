@@ -114,6 +114,7 @@ export default {
         this.password = '';
         this.$router.push('/');
       } catch (err) {
+        this.error = err;
         console.log(err);
       }
     },

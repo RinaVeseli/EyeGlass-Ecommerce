@@ -1,106 +1,146 @@
-const { auth, db } = require('../services/firebase');
-const bcrypt = require('bcryptjs');
-// const { validationResult } = require('express-validator');
-const User = require('../model/userModel');
+const admin = require("../services/firebase");
+const registerUserSchema = require("../validator/userValidation/registerUserSchema");
 
-exports.userRegister = async (req, res) => {
-  const { email, password, role } = req.body;
-  // const errors = validationResult(req);
+const db = admin.firestore();
 
-  // if (!errors.isEmpty()) {
-  //   return res.status(422).json({ errors: errors.array() });
-  // }
+const userController = {
+  register: async (req, res) => {
+    const validationResult = registerUserSchema.validate(req.body);
 
-  try {
-    // Check if user already exists
-    const userRecord = await auth.getUserByEmail(email);
-    if (userRecord) {
-      return res
-        .status(400)
-        .json({ message: 'Email already in use' });
+    if (validationResult.error) {
+      return res.status(400).json({error: validationResult.error});
     }
-  } catch (error) {
-    // If user does not exist, continue with registration
-    if (error.code === 'auth/user-not-found') {
-      try {
-        // Hash password before saving to databases
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Save user in Cloud Firestore
-        const newUserFirestore = await db.collection('users').add({
-          email,
-          password: hashedPassword,
-          role,
-        });
+    const {email, password} = req.body;
 
-        // Save user in Mongoose
-        const newUserMongoose = await User.create({
-          email,
-          password: hashedPassword,
-          role,
-        });
+    try {
+      const user = await admin.auth().createUser({
+        email,
+        password,
+      });
 
-        // Return success message
-        return res.status(201).json({
-          message: 'User created successfully',
-          user: {
-            id: newUserFirestore.id,
-            email,
-            role,
-          },
+      if (user.email.includes("ubt-uni.net")) {
+        const costumClaims = {admin: true};
+        await admin.auth().setCustomUserClaims(user.uid, costumClaims);
+
+        await db.collection("users").doc(user.uid).set({
+          email: user.email,
+          role: costumClaims,
         });
-      } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Server error' });
       }
-    } else {
-      console.error(error);
-      return res.status(500).json({ message: 'Server error' });
+      return res.json(user);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json();
     }
-  }
+  },
 };
 
-exports.userLogin = async (req, res) => {
-  const { email, password } = req.body;
+module.exports = userController;
 
-  try {
-    // Get user from Cloud Firestore
-    const querySnapshot = await db
-      .collection('users')
-      .where('email', '==', email)
-      .get();
+// const { auth, db } = require('../services/firebase');
+// const bcrypt = require('bcryptjs');
+// // const { validationResult } = require('express-validator');
+// const User = require('../model/userModel');
 
-    if (querySnapshot.empty) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+// exports.userRegister = async (req, res) => {
+//   const { email, password, role } = req.body;
+//   // const errors = validationResult(req);
 
-    const user = querySnapshot.docs[0].data();
+//   // if (!errors.isEmpty()) {
+//   //   return res.status(422).json({ errors: errors.array() });
+//   // }
 
-    // Check if password is correct
-    const isMatch = await bcrypt.compare(password, user.password);
+//   try {
+//     // Check if user already exists
+//     const userRecord = await auth.getUserByEmail(email);
+//     if (userRecord) {
+//       return res
+//         .status(400)
+//         .json({ message: 'Email already in use' });
+//     }
+//   } catch (error) {
+//     // If user does not exist, continue with registration
+//     if (error.code === 'auth/user-not-found') {
+//       try {
+//         // Hash password before saving to databases
+//         const salt = await bcrypt.genSalt(10);
+//         const hashedPassword = await bcrypt.hash(password, salt);
 
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+//         // Save user in Cloud Firestore
+//         const newUserFirestore = await db.collection('users').add({
+//           email,
+//           password: hashedPassword,
+//           role,
+//         });
 
-    // Generate JWT token
-    const token = await auth.createCustomToken(user.email);
+//         // Save user in Mongoose
+//         const newUserMongoose = await User.create({
+//           email,
+//           password: hashedPassword,
+//           role,
+//         });
 
-    // Return success message with token
-    return res.status(200).json({ token });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-};
+//         // Return success message
+//         return res.status(201).json({
+//           message: 'User created successfully',
+//           user: {
+//             id: newUserFirestore.id,
+//             email,
+//             role,
+//           },
+//         });
+//       } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Server error' });
+//       }
+//     } else {
+//       console.error(error);
+//       return res.status(500).json({ message: 'Server error' });
+//     }
+//   }
+// };
 
-exports.allUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    return res.status(200).json({ users });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-};
+// exports.userLogin = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     // Get user from Cloud Firestore
+//     const querySnapshot = await db
+//       .collection('users')
+//       .where('email', '==', email)
+//       .get();
+
+//     if (querySnapshot.empty) {
+//       return res.status(400).json({ message: 'Invalid credentials' });
+//     }
+
+//     const user = querySnapshot.docs[0].data();
+
+//     // Check if password is correct
+//     const isMatch = await bcrypt.compare(password, user.password);
+
+//     if (!isMatch) {
+//       return res.status(400).json({ message: 'Invalid credentials' });
+//     }
+
+//     // Generate JWT token
+//     const token = await auth.createCustomToken(user.email);
+
+//     // Return success message with token
+//     return res.status(200).json({ token });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+// exports.allUsers = async (req, res) => {
+//   try {
+//     const users = await User.find();
+//     return res.status(200).json({ users });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: 'Server error' });
+//   }
+// };

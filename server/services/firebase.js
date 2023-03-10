@@ -4,9 +4,9 @@ var serviceAccount = require('../credentials/eyeglasses-e-commerce-firebase-admi
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL:
-    'https://eyeglasses-e-commerce-default-rtdb.firebaseio.com',
+  // databaseURL:
+  //   'https://eyeglasses-e-commerce-default-rtdb.firebaseio.com',
 });
 // const auth = admin.auth();
-exports.auth = admin.auth();
+// exports.auth = admin.auth();
 module.exports = admin;

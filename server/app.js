@@ -8,8 +8,8 @@ const usersRouter = require('./routes/userRoutes');
 const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
-const functions = require('firebase-functions');
 const cookieParser = require('cookie-parser');
+const getAuthToken = require('./middleware/getAuthToken');
 // const admin = require('./services/firebase');
 //Middleware
 
@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(getAuthToken);
 //Router
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/brands', brandsRouter);
@@ -43,4 +44,4 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
-exports.api = functions.https.onRequest(usersRouter);
+// exports.api = functions.https.onRequest(usersRouter);

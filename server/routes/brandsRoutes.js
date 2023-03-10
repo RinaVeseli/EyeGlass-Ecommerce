@@ -1,8 +1,11 @@
 const express = require('express');
+const checkIfAdmin = require('../middleware/checkIfAdmin');
+const checkIfAuthenticated = require('../middleware/checkIfAuthenticated');
 const brandController = require('./../controllers/brandController');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const { isAdmin } = require('../middleware/auth');
+
+// const userController = require('../controllers/userController');
+// const { isAdmin } = require('../middleware/auth');
 //for price at glasses price
 
 // router.route('/brand-stats').get(brandController.getBrandStats);
@@ -10,10 +13,12 @@ const { isAdmin } = require('../middleware/auth');
 
 // .route('/top-5-cheap')
 // .get(brandController.aliasTopBrand, brandController.getAllBrands)
+// router.use(checkIfAuthenticated)
+
 router
   .route('/')
   .get(brandController.getAllBrands)
-  .post(isAdmin, brandController.createBrand);
+  .post(brandController.createBrand, checkIfAdmin);
 
 router
   .route('/:id')

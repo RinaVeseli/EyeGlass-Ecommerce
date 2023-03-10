@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import {getAuth, onAuthStateChanged} from 'firebase/auth';
 const routes = [
   // {
   //   path: '/',
@@ -42,6 +42,7 @@ const routes = [
   {
     path: '/contact-us',
     name: 'contact-us',
+    meta: {isAuthenticated: true},
     component: () =>
       import(
         /* webpackChunkName: "portfolio"  */ '../views/pages/Contact-us.vue'
@@ -54,7 +55,7 @@ const routes = [
       import(
         /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
       ),
-    meta: { requiresAuth: true },
+    meta: { isAdmin: true },
   },
   {
     path: `/edit/:_id`,
@@ -94,17 +95,35 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(
-    (record) => record.meta.requiresAuth
-  );
-  const isAuthenticated = firebase.auth().currentUser;
-  console.log('isauthenticated', isAuthenticated);
-  if (requiresAuth && !isAuthenticated) {
-    next('/login');
-  } else {
-    next();
-  }
+  onAuthStateChanged(getAuth(), async (user) => {
+    const shouldBeLoggedIn = (record) =>
+      record.meta.isAuthenticated || record.meta.isAdmin;
+
+    if (to.matched.some((record) => shouldBeLoggedIn(record))) {
+      if (!user) {
+        next("/login");
+      } else {
+        const tokenResult = await getAuth().currentUser.getIdTokenResult();
+        const isAdmin = tokenResult.claims.admin;
+        if (isAdmin && to.matched.some((record) => !record.meta.isAdmin)) {
+          next();
+        } else if (to.matched.some((record) => record.meta.isAdmin)) {
+          if (!tokenResult.claims.admin) {
+            next("/");
+          } else {
+            next();
+          }
+        } else {
+          next();
+        }
+      }
+    } else {
+      next();
+    }
+  });
 });
+
 
 export default router;

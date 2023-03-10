@@ -17,8 +17,8 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(brandController.getAllBrands)
-  .post(brandController.createBrand, checkIfAdmin);
+  .get(checkIfAuthenticated, brandController.getAllBrands)
+  .post(checkIfAdmin, brandController.createBrand);
 
 router
   .route('/:id')

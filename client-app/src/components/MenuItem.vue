@@ -93,7 +93,7 @@ export default {
   computed: {
     showLabel() {
       return this.smallMenu ? this.depth > 0 : true;
-    },
+    }
   },
   methods: {
     toggleMenu() {

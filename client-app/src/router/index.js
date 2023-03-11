@@ -174,6 +174,14 @@ const routes = [
             /* webpackChunkName: "Edit" */ '../components/eyeglasses/EditEyeglasses.vue'
           ),
       },
+      {
+        path: `users`,
+        name: 'UsersList',
+        component: () =>
+          import(
+            /* webpackChunkName: "Users" */ '../components/users/UsersList.vue'
+          ),
+      },
     ],
   },
 ];

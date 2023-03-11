@@ -34,9 +34,37 @@ const userController = {
         return res.status(500).json();
     }
   },
+  listAllUsers: async (req, res) => {
+    try {
+      const userList = await admin.auth().listUsers();
+      const users = userList.users;
+      return res.status(200).json(users);
+    } catch (error) {
+      console.log('Error listing users:', error);
+      return res.status(500).json();
+    }
+  },
+  deleteUser: async(req, res) => {
+    const uid = req.params.id;
+
+    admin.auth().deleteUser(uid)
+    .then(() => {
+      res.status(204).json();
+    })
+    .catch(error => {
+      console.error('Error deleting user:', error);
+      res.status(500).json('Error deleting user');
+    });
+  }
 };
 
+
+
+
 module.exports = userController;
+
+
+
 
 // const { auth, db } = require('../services/firebase');
 // const bcrypt = require('bcryptjs');

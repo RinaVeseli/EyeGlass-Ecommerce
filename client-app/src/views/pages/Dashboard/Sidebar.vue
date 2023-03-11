@@ -9,7 +9,7 @@
           class="image"
         ></v-img>
       </v-avatar>
-      <h1 class="black--text">Alison Burgas</h1>
+      <h1 class="black--text">Hello {{ currentUser.email }}</h1>
     </div>
     <MenuItem
       v-for="(item, index) in menuTree"
@@ -36,9 +36,17 @@ import {
   faShapes,
   faPager,
   faUserShield,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 export default {
   name: 'recursive-menu',
+  computed: {
+    currentUser() {
+      return firebase.auth().currentUser;
+    }
+  },
   data: () => ({
     smallMenu: false,
     menuTree: [
@@ -148,6 +156,11 @@ export default {
             ],
           },
         ],
+      },
+      {
+        label: 'Users',
+        icon: faUser,
+        path: '/dashboard/users'
       },
       {
         label: 'Settings',

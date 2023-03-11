@@ -270,17 +270,6 @@ label {
   margin: 10px;
   text-align: center;
 }
-button {
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 /* Media queries */
 @media only screen and (max-width: 767px) {

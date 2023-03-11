@@ -91,7 +91,16 @@ export default {
   /* padding: 5px 10px; */
   cursor: pointer;
 }
-
+.shopNow {
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .nameFavo,
 .priceFrame {
   padding: 0px 50px;

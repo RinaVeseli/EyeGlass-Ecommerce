@@ -10,7 +10,7 @@
           <v-btn variant="outlined" color="green" class="mr-4">
             <router-link
               class="text-black"
-              :to="{ name: `Create` }"
+              :to="{ name: `CreateEye` }"
               color="white"
             >
               Add New
@@ -51,7 +51,10 @@
                   prepend-icon="mdi-pencil"
                   ><router-link
                     class="text-black"
-                    :to="{ name: `Edit`, params: { _id: item._id } }"
+                    :to="{
+                      name: `EditEye`,
+                      params: { _id: item._id },
+                    }"
                     >Edit
                   </router-link></v-btn
                 >

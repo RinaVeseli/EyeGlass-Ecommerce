@@ -4,6 +4,8 @@ const checkIfAuthenticated = async (req, res, next) => {
   try {
     const {authToken} = req;
     const userInfo = await admin.auth().verifyIdToken(authToken);
+    const userId = userInfo.uid;
+    req.user = {id: userId};
     req.authId = userInfo.uid;
     next();
   } catch (error) {

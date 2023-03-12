@@ -9,7 +9,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
-
 loadFonts();
 const firebaseConfig = {
   apiKey: 'AIzaSyAcR6-Zm_oj-3mOXKxEbsJnaCIVndVNIkk',

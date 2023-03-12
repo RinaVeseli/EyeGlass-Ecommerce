@@ -13,6 +13,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const getAuthToken = require('./middleware/getAuthToken');
 const aboutRoute = require('./routes/aboutRoute');
+const shoppingCartRoutes = require('./routes/shopingCartRoutes');
+const orderRouter = require('./routes/orderRoutes');
 // const admin = require('./services/firebase');
 //Middleware
 
@@ -40,6 +42,8 @@ app.use('/api/v1/eyeGlasses', eyeGlassesRouter);
 app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1/about', aboutRoute);
 app.use('/api/v1/contact', contactRouter);
+app.use('/api/v1/cart', shoppingCartRoutes);
+app.use('/api/v1/order', orderRouter);
 app.all('*', (req, res, next) => {
   next(
     new AppError(`Can't find ${req.originalUrl} on this server!`, 404)

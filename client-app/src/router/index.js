@@ -108,6 +108,22 @@ const routes = [
       ),
   },
   {
+    path: '/shopping-cart',
+    name: 'shoppingCart',
+    component: () =>
+      import(
+        /* webpackChunkName: "shoppingCart" */ '../views/pages/ShoppingCart.vue'
+      ),
+  },
+  {
+    path: '/orders',
+    name: 'shoppingCart',
+    component: () => 
+      import (
+        /* webpackChunkName: "ordersList" */ '../views/user/OrdersList.vue'
+      ),
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: () =>

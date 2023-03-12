@@ -108,7 +108,7 @@ export default {
         this.founded = '';
         this.products = '';
         this.createdIn = '';
-        this.$router.push('/');
+        this.$router.push('/admin/dashboard/brand/brand-list');
       } catch (err) {
         console.log(err);
       }

@@ -3,10 +3,25 @@
   <div class="mai">
     <div class="maindetails">
       <div class="img">
-        <img
-          :src="'http://localhost:3000/img/eyeglasses/' + imageCover"
-          alt="Product Photo"
-        />
+        <v-card max-width="944" height="500" class="mx-auto">
+          <v-carousel
+            :continuous="true"
+            :show-arrows="true"
+            hide-delimiter-background
+            delimiter-icon="mdi-circle"
+            height="460"
+          >
+            <v-carousel-item v-for="(slide, i) in slides" :key="i">
+              <img
+                :src="
+                  'http://localhost:3000/img/eyeglasses/' + images[i]
+                "
+                height="100%"
+                tile
+              />
+            </v-carousel-item>
+          </v-carousel>
+        </v-card>
       </div>
       <div class="mainDetail">
         <div class="details">
@@ -109,7 +124,9 @@ export default {
       priceDiscount: '',
       description: '',
       imageCover: null,
-      images: null,
+      images: [],
+
+      slides: ['First', 'Second', 'Third', 'Fourth'],
     };
   },
   created: function () {
@@ -131,8 +148,8 @@ export default {
         this.priceDiscount = response.data.data.data.priceDiscount;
         this.description = response.data.data.data.description;
         this.imageCover = response.data.data.data.imageCover;
-        this.images = response.data.data.data.images[0];
-        console.log(this.imageCover);
+        this.images = response.data.data.data.images;
+        console.log(this.images);
       } catch (err) {
         console.log(err);
       }
@@ -140,7 +157,7 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .maindetails {
   margin-top: 20px;
   display: flex;
@@ -148,16 +165,20 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   padding: 60px 0;
-  border-bottom: solid rgb(142, 142, 142) 1px;
+  box-shadow: 0px 12px 10px -15px #111;
+  align-items: center;
+  height: 750px;
+}
+.mx-auto {
+  border: none;
 }
 .mainDetail {
-  width: 28.125vw;
+  margin-left: -130px;
+  width: 29.125vw;
   max-width: 540px;
   min-width: 450px;
-  padding-top: 2.08vw;
 }
 .details {
-  padding-top: 2.08vw;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
@@ -166,10 +187,15 @@ export default {
   width: 100%;
 }
 .nameRating h1 {
+  font-size: 30px;
+  font-weight: 700;
   padding: 15px 0;
 }
+.nameRating h2 {
+  font-size: 20px;
+}
 .img img {
-  width: 700px;
+  width: 900px;
   height: auto;
   object-fit: cover;
   border-radius: 40px;
@@ -189,6 +215,7 @@ export default {
   align-items: center;
 }
 .payments {
+  margin-top: 8px;
   display: flex;
   gap: 10px;
   border-radius: 10px;
@@ -197,7 +224,7 @@ export default {
   align-items: center;
 }
 .payments h3 {
-  background-color: blueviolet;
+  background-color: #bacfe8;
   color: white;
   padding: 10px;
   border-radius: 10px;
@@ -209,7 +236,7 @@ export default {
 }
 .addtocart {
   width: 100%;
-  background-color: aqua;
+  background-color: #0071bc;
   color: white;
   border-radius: 10px;
   height: 80px;
@@ -231,7 +258,7 @@ export default {
   justify-content: center;
 }
 .imgFrame img {
-  width: 400px;
+  width: 700px;
   height: auto;
   object-fit: cover;
 }
@@ -254,5 +281,70 @@ export default {
 .firstColumn p,
 .SecondColumn p {
   padding: 10px;
+}
+.descBox {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
+
+  .imgFrame {
+    flex: 1;
+    margin-right: 20px;
+
+    img {
+      width: 100%;
+    }
+
+    @media screen and (min-width: 768px) {
+      max-width: 700px;
+    }
+  }
+
+  .desc {
+    flex: 2;
+
+    .paragraph {
+      margin-bottom: 20px;
+
+      p {
+        margin-bottom: 10px;
+      }
+    }
+
+    .otherDetails {
+      display: flex;
+      flex-direction: row;
+
+      @media screen and (max-width: 767px) {
+        flex-direction: column;
+      }
+
+      .firstColumn,
+      .SecondColumn {
+        flex: 1;
+        margin-right: 20px;
+
+        @media screen and (max-width: 767px) {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+
+        p {
+          margin-bottom: 5px;
+        }
+      }
+
+      .SecondColumn {
+        margin-right: 0;
+
+        @media screen and (max-width: 767px) {
+          margin-top: -20px;
+        }
+      }
+    }
+  }
 }
 </style>

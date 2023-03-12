@@ -59,6 +59,15 @@ const routes = [
   //   meta: { isAdmin: true },
   // },
   {
+    path: '/header',
+    name: 'Header',
+    component: () =>
+      import(
+        /* webpackChunkName: "create" */ '../components/Common/Header.vue'
+      ),
+    meta: { isAdmin: true },
+  },
+  {
     path: `/edit/:_id`,
     name: 'Edit',
     component: () =>
@@ -100,7 +109,16 @@ const routes = [
   },
   {
     path: '/dashboard',
+    name: 'dashboard',
+    component: () =>
+      import(
+        /* webpackChunkName: "login" */ '../views/pages/Dashboard/DashboardHome.vue'
+      ),
+  },
+  {
+    path: '/admin/dashboard',
     name: 'Dashboard',
+    meta: { isAdmin: true },
     component: () =>
       import(
         /* webpackChunkName: "dashboard" */ '../views/pages/Dashboard/Dashboard.vue'
@@ -158,7 +176,7 @@ const routes = [
       },
       {
         path: 'eyeglasses/create',
-        name: 'Create',
+        name: 'CreateEye',
         component: () =>
           import(
             /* webpackChunkName: "create" */ '../components/eyeglasses/AddEyeglasses.vue'
@@ -166,7 +184,7 @@ const routes = [
       },
       {
         path: `eyeglasses/editEyeglasses/:_id`,
-        name: 'Edit',
+        name: 'EditEye',
         component: () =>
           import(
             /* webpackChunkName: "Edit" */ '../components/eyeglasses/EditEyeglasses.vue'
@@ -178,6 +196,14 @@ const routes = [
         component: () =>
           import(
             /* webpackChunkName: "Users" */ '../components/users/UsersList.vue'
+          ),
+      },
+      {
+        path: '/:catchAll(.*)',
+        name: 'ErroPage',
+        component: () =>
+          import(
+            /* webpackChunkName: "Edit" */ '../views/pages/ErrorPage.vue'
           ),
       },
     ],

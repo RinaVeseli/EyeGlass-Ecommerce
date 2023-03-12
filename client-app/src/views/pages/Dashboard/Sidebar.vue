@@ -1,15 +1,16 @@
 <template>
   <div class="menu" :class="{ 'small-menu': smallMenu }">
-    <div class="text-center mt-5">
-      <h3 class="teal--text font-weight-bold">Optical</h3>
-      <v-divider color="white" class="mt-4"></v-divider>
-      <v-avatar class="my-5" size="60">
+    <div class="text-center mt-3">
+      <v-divider color="white" class="mt-3"></v-divider>
+      <v-avatar class="my-4 m-3" size="40">
         <v-img
-          src="https://cdn.vuetifyjs.com/images/lists/1.jpg"
+          src="http://cdn.onlinewebfonts.com/svg/img_569204.png"
           class="image"
         ></v-img>
       </v-avatar>
-      <h1 v-if="currentUser" class="black--text">Hello {{ currentUser.email }}</h1>
+      <h3 class="my-4 m-3 black--text" size="40">
+        Hello {{ currentUser.email }}
+      </h3>
     </div>
     <MenuItem
       v-for="(item, index) in menuTree"
@@ -36,7 +37,9 @@ import {
   faShapes,
   faPager,
   faUserShield,
-  faUser
+  faUser,
+  faComputerMouse,
+  faArrowAltCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -45,7 +48,7 @@ export default {
   computed: {
     currentUser() {
       return firebase.auth().currentUser;
-    }
+    },
   },
   data: () => ({
     smallMenu: false,
@@ -67,15 +70,15 @@ export default {
           // },
           {
             label: 'About',
-            path: '/dashboard/about-list',
+            path: '/admin/dashboard/about-list',
           },
           {
             label: 'Faqs',
-            path: '/dashboard/faqs',
+            path: '/admin/dashboard/faqs',
           },
           {
             label: 'contact',
-            path: '/dashboard/contact',
+            path: '/admin/dashboard/contact',
           },
         ],
       },
@@ -88,11 +91,11 @@ export default {
             children: [
               {
                 label: 'Details',
-                path: '/products/shapes/details',
+                path: '/admin/products/shapes/details',
               },
               {
                 label: 'Create',
-                path: '/products/shapes/create',
+                path: '/admin/products/shapes/create',
               },
             ],
           },
@@ -101,11 +104,11 @@ export default {
             children: [
               {
                 label: 'Details',
-                path: '/dashboard/eyeglasses/eyeglasses-list',
+                path: '/admin/dashboard/eyeglasses/eyeglasses-list',
               },
               {
                 label: 'Create',
-                path: '/dashboard/eyeglasses/create',
+                path: '/admin/dashboard/eyeglasses/create',
               },
             ],
           },
@@ -115,43 +118,44 @@ export default {
             children: [
               {
                 label: 'Details',
-                path: '/products/shapes/details',
+                path: '/admin/products/shapes/details',
               },
               {
                 label: 'Create',
-                path: '/products/shapes/create',
+                path: '/admin/products/shapes/create',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        label: 'Common',
+        icon: faComputerMouse,
+        children: [
+          {
+            label: 'Brand',
+
+            children: [
+              {
+                label: 'Details',
+                path: '/admin/dashboard/brand/brand-list',
+              },
+              {
+                label: 'Create',
+                path: '/admin/dashboard/brand/create',
               },
             ],
           },
           {
-            label: 'Common',
+            label: 'Category',
             children: [
               {
-                label: 'Brand',
-
-                children: [
-                  {
-                    label: 'Details',
-                    path: '/dashboard/brand/brand-list',
-                  },
-                  {
-                    label: 'Create',
-                    path: '/dashboard/brand/create',
-                  },
-                ],
+                label: 'Details',
+                path: '/admin/dashboard/brand/brand-list',
               },
               {
-                label: 'Category',
-                children: [
-                  {
-                    label: 'Details',
-                    path: '/dashboard/brand/brand-list',
-                  },
-                  {
-                    label: 'Create',
-                    path: '/dashboard/brand/create',
-                  },
-                ],
+                label: 'Create',
+                path: '/admin/dashboard/brand/create',
               },
             ],
           },
@@ -160,11 +164,17 @@ export default {
       {
         label: 'Users',
         icon: faUser,
-        path: '/dashboard/users'
+        path: '/admin/dashboard/users',
       },
+
       {
         label: 'Settings',
         icon: faGear,
+      },
+      {
+        label: 'Logout',
+        icon: faArrowAltCircleRight,
+        path: '/',
       },
     ],
   }),
@@ -173,7 +183,7 @@ export default {
   },
   methods: {
     checkScreenSize() {
-      if (window.innerWidth <= 600) {
+      if (window.innerWidth <= 1468) {
         this.smallMenu = true;
       } else {
         this.smallMenu = false;

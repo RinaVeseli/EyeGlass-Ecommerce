@@ -18,33 +18,64 @@
     </v-btn>
     <nav :class="{ 'navbar__menu-open': isMenuOpen }">
       <ul>
-        <li v-for="item in navigationItems" :key="item.name">
-          <router-link :to="item.path">{{ item.name }}</router-link>
+        <li
+          v-for="item in navigationItems"
+          v-bind:key="item.name"
+          style="margin-top: 25px; margin-right: 10px"
+        >
+          <router-link v-bind:to="item.path">
+            {{ item.name }}
+          </router-link>
         </li>
-        <li class="controls">
+        <li
+          style="margin-top: 25px; margin-right: 10px"
+          class="controls"
+        >
           <div v-if="signIn">
             <button @click="signOut">LOG OUT</button>
           </div>
           <div v-else>
-            <router-link to="/register">REGISTER</router-link>
+            <router-link
+              to="/register"
+              style="margin-top: 25px; margin-right: 25px"
+              >REGISTER</router-link
+            >
             <router-link :to="{ name: 'login' }">LOGIN</router-link>
           </div>
         </li>
       </ul>
     </nav>
-    <div class="navbar__icons">
+    <v-divider vertical class=""></v-divider>
+    <v-btn icon class="mx-1">
+      <v-icon>mdi-account-outline</v-icon>
+      <v-menu activator="parent" location="bottom right">
+        <v-list>
+          <router-link to="/admin/dashboard">
+            <v-list-item>
+              <v-list-item-title>Dashboard</v-list-item-title>
+            </v-list-item>
+          </router-link>
+          <router-link to="/orders">
+            <v-list-item>
+              <v-list-item-title> Orders </v-list-item-title>
+            </v-list-item>
+          </router-link>
+        </v-list>
+      </v-menu>
+    </v-btn>
+
+    <v-divider vertical class=""></v-divider>
+    <v-btn icon class="mx-1">
+      <v-icon>mdi-heart-outline</v-icon>
+    </v-btn>
+    <v-divider vertical class=""></v-divider>
+    <router-link to="/shopping-cart">
       <v-btn icon class="mx-1">
-        <v-icon>mdi-account-outline</v-icon>
-      </v-btn>
-      <v-btn icon class="mx-1">
-        <v-icon>mdi-heart-outline</v-icon>
-      </v-btn>
-      <v-btn icon class="mx-1">
-        <v-badge color="#94D0EF" content="2">
+        <v-badge color="#94D0EF" :content="cartLength">
           <v-icon>mdi-cart-outline</v-icon>
         </v-badge>
       </v-btn>
-    </div>
+    </router-link>
   </v-app-bar>
 </template>
 
@@ -53,9 +84,21 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import logo from '../../assets/303-3037502_2017-atlantic-eye-center-eye-optical-logo-removebg-preview.png';
+import axios from 'axios';
 export default {
   mounted() {
     this.setupFirebase();
+  },
+  created() {
+    axios
+      .get('http://localhost:3000/api/v1/cart')
+      .then((response) => {
+        this.cartLength = response.data.result;
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   methods: {
     setupFirebase() {
@@ -86,6 +129,7 @@ export default {
     return {
       signIn: false,
       logo: logo,
+      cartLength: 0,
 
       navigationItems: [
         { path: '/', name: 'HOME' },
@@ -107,23 +151,28 @@ export default {
 .v-toolbar__title {
   font-size: 2rem !important;
 }
+
 .v-btn {
   margin-top: 30px;
 }
+
 img {
   margin-top: 25px;
   margin-left: 5px;
 }
+
 .v-badge__badge {
   font-size: 10px !important;
   height: 18px !important;
   min-width: 18px !important;
 }
+
 nav {
-  margin-top: 28px;
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 }
+
 ul {
   margin-right: 10px;
   list-style: none;
@@ -131,17 +180,20 @@ ul {
   justify-content: flex-end;
   gap: 1rem;
 }
+
 a:link,
 a:visited {
   text-decoration: none;
   color: rgb(57, 57, 57);
   color: #464b7b;
 }
+
 li {
   transition: all 0.1s ease-in-out;
   font-size: 19px;
   color: #464b7b;
 }
+
 li:hover {
   transform: scale(1.02);
 }

@@ -8,7 +8,7 @@
           class="image"
         ></v-img>
       </v-avatar>
-      <h3 class="my-4 m-3 black--text" size="40">
+      <h3 v-if="currentUser" class="my-4 m-3 black--text" size="40">
         Hello {{ currentUser.email }}
       </h3>
     </div>

@@ -58,7 +58,7 @@
             Size : <b>{{ size }}</b>
           </h1>
         </div>
-        <button class="addtocart"><p>Add to cart</p></button>
+        <button @click="addToCart($route.params._id)" :disabled="isInCart" class="addtocart"><p>{{cartText}}</p></button>
       </div>
     </div>
     <div class="productDescr">
@@ -127,10 +127,13 @@ export default {
       images: [],
 
       slides: ['First', 'Second', 'Third', 'Fourth'],
+      isInCart: false,
+      cartText: 'Add To Cart',
     };
   },
   created: function () {
     this.getProductById();
+    this.checkCart();
   },
   methods: {
     // Get Product By Id
@@ -154,9 +157,34 @@ export default {
         console.log(err);
       }
     },
-  },
-};
+    async addToCart(id){
+      try {
+        await axios.post(`http://localhost:3000/api/v1/cart/${id}`);
+        this.isInCart = true;
+        this.cartText = 'Already in cart'
+        this.$router.replace('/shopping-cart')
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    
+  checkCart() {
+      // fetch cart data from server
+      axios.get('http://localhost:3000/api/v1/cart').then(response => {
+        // check if product is already in cart
+        console.log(response.data.data.cartItems);
+        if (response.data.data.cartItems.some(p => p.eyeglasses === this.$route.params._id)) {
+          this.isInCart = true;
+          this.cartText = 'Already in cart'
+        }
+      });
+    },
+  }
+}
+
+
 </script>
+
 <style lang="scss">
 .maindetails {
   margin-top: 20px;

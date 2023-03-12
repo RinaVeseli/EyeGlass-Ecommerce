@@ -71,15 +71,15 @@ const routes = [
         /* webpackChunkName: "portfolio"  */ '../views/pages/Contact-us.vue'
       ),
   },
-  {
-    path: '/create',
-    name: 'Create',
-    component: () =>
-      import(
-        /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
-      ),
-    meta: { isAdmin: true },
-  },
+  // {
+  //   path: '/create',
+  //   name: 'Create',
+  //   component: () =>
+  //     import(
+  //       /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
+  //     ),
+  //   meta: { isAdmin: true },
+  // },
   {
     path: '/header',
     name: 'Header',
@@ -127,6 +127,22 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "login" */ '../views/user/Register.vue'
+      ),
+  },
+  {
+    path: '/shopping-cart',
+    name: 'shoppingCart',
+    component: () =>
+      import(
+        /* webpackChunkName: "shoppingCart" */ '../views/pages/ShoppingCart.vue'
+      ),
+  },
+  {
+    path: '/orders',
+    name: 'shoppingCart',
+    component: () => 
+      import (
+        /* webpackChunkName: "ordersList" */ '../views/user/OrdersList.vue'
       ),
   },
   {
@@ -179,7 +195,6 @@ const routes = [
           import(
             /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `brand/edit/:_id`,
@@ -204,7 +219,6 @@ const routes = [
           import(
             /* webpackChunkName: "create" */ '../components/eyeglasses/AddEyeglasses.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `eyeglasses/editEyeglasses/:_id`,

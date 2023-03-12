@@ -6,7 +6,11 @@ const brandsRouter = require('./routes/brandsRoutes');
 const eyeGlassesRouter = require('./routes/eyeGlassesModel');
 const usersRouter = require('./routes/userRoutes');
 const contactRouter = require('./routes/contactRoutes');
+const orderStepsRoute = require('./routes/orderStepsRoute');
 const reviewRoutes = require('./routes/reviewRoutes');
+const faqRoute = require('./routes/faqRoute');
+const shapeRoute = require('./routes/shapeRoute');
+const contactsRoute = require('./routes/contactsRoute');
 const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
@@ -40,6 +44,10 @@ app.use('/api/v1/eyeGlasses', eyeGlassesRouter);
 app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1/about', aboutRoute);
 app.use('/api/v1/contact', contactRouter);
+app.use('/api/v1/orderSteps', orderStepsRoute);
+app.use('/api/v1/faq', faqRoute);
+app.use('/api/v1/shape', shapeRoute);
+app.use('/api/v1/contacts', contactsRoute);
 app.all('*', (req, res, next) => {
   next(
     new AppError(`Can't find ${req.originalUrl} on this server!`, 404)

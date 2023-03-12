@@ -8,14 +8,6 @@ const aboutSchema = new Schema({
     required: [true, 'About must have a description'],
 
     trim: true,
-    // maxLength: [
-    //   400,
-    //   'About Description must have less or equal then 200 characters',
-    // ],
-    // minLength: [
-    //   30,
-    //   'About Description must have more or equal then 30 characters',
-    // ],
   },
   file: {
     type: String,

@@ -5,7 +5,7 @@ import 'bulma/css/bulma.css';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-// import DashboardVue from './views/pages/Dashboard/Dashboard.vue';
+import DashboardVue from './views/pages/Dashboard/Dashboard.vue';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -41,5 +41,5 @@ firebase.auth().onAuthStateChanged((user) => {
 
       .mount('#app');
   }
-  // app.component('Dashboard', DashboardVue);
+  app.component('Dashboard', DashboardVue);
 });

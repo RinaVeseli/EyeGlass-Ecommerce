@@ -1,35 +1,191 @@
 <template>
-  <v-card elevation="24" max-width="444" class="mx-auto">
-    <v-carousel
-      :continuous="true"
-      :show-arrows="false"
-      hide-delimiter-background
-      delimiter-icon="mdi-circle"
-      height="300"
+  <v-app-bar
+    app
+    color="white"
+    dark
+    class="navbar"
+    style="height: 86px"
+  >
+    <div class="navbar__logo">
+      <img :src="logo" />
+    </div>
+    <v-btn
+      icon
+      class="navbar__menu-btn"
+      @click="isMenuOpen = !isMenuOpen"
     >
-      <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <v-sheet :color="colors[i]" height="100%" tile>
-          <div class="d-flex fill-height justify-center align-center">
-            <div class="text-h2">{{ slide }} Slide</div>
+      <v-icon>mdi-menu</v-icon>
+    </v-btn>
+    <nav :class="{ 'navbar__menu-open': isMenuOpen }">
+      <ul>
+        <li v-for="item in navigationItems" :key="item.name">
+          <router-link :to="item.path">{{ item.name }}</router-link>
+        </li>
+        <li class="controls">
+          <div v-if="signIn">
+            <button @click="signOut">LOG OUT</button>
           </div>
-        </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
-  </v-card>
+          <div v-else>
+            <router-link to="/register">REGISTER</router-link>
+            <router-link :to="{ name: 'login' }">LOGIN</router-link>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <div class="navbar__icons">
+      <v-btn icon class="mx-1">
+        <v-icon>mdi-account-outline</v-icon>
+      </v-btn>
+      <v-btn icon class="mx-1">
+        <v-icon>mdi-heart-outline</v-icon>
+      </v-btn>
+      <v-btn icon class="mx-1">
+        <v-badge color="#94D0EF" content="2">
+          <v-icon>mdi-cart-outline</v-icon>
+        </v-badge>
+      </v-btn>
+    </div>
+  </v-app-bar>
 </template>
+
 <script>
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import logo from '../../assets/303-3037502_2017-atlantic-eye-center-eye-optical-logo-removebg-preview.png';
 export default {
-  data() {
+  mounted() {
+    this.setupFirebase();
+  },
+  methods: {
+    setupFirebase() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log(user);
+          // User is signed in.
+          console.log('signed in');
+          console.log(user.email);
+          this.signIn = true;
+        } else {
+          // No user is signed in.
+          this.signIn = false;
+          console.log('signed out', this.signIn);
+        }
+      });
+    },
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.replace({ path: 'login' });
+        });
+    },
+  },
+  data: function () {
     return {
-      colors: [
-        'green',
-        'secondary',
-        'yellow darken-4',
-        'red lighten-2',
-        'orange darken-1',
+      signIn: false,
+      logo: logo,
+
+      navigationItems: [
+        { path: '/', name: 'HOME' },
+        { path: '/autoship', name: 'AUTOSHIP' },
+        { path: '/contacts', name: 'CONTACTS' },
+        { path: '/glasses', name: 'GLASSES' },
+        { path: '/sunglasses', name: 'SUNGLASSES' },
+        { path: '/about', name: 'ABOUT' },
+        { path: '/contact-us', name: 'CONTACT-US' },
+        // { path: '/edit', name: 'Edit' },
+        // { path: '/create', name: 'CREATE' },
       ],
-      slides: ['First', 'Second', 'Third', 'Fourth', 'Fifth'],
     };
   },
 };
 </script>
+
+<style>
+.v-toolbar__title {
+  font-size: 2rem !important;
+}
+.v-btn {
+  margin-top: 30px;
+}
+img {
+  margin-top: 25px;
+  margin-left: 5px;
+}
+.v-badge__badge {
+  font-size: 10px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+}
+nav {
+  display: flex;
+  justify-content: flex-end;
+}
+ul {
+  margin-right: 10px;
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+a:link,
+a:visited {
+  text-decoration: none;
+  color: rgb(57, 57, 57);
+  color: #464b7b;
+}
+li {
+  transition: all 0.1s ease-in-out;
+  font-size: 19px;
+  color: #464b7b;
+}
+li:hover {
+  transform: scale(1.02);
+}
+
+.controls:hover {
+  transform: none;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+.navbar__logo {
+  flex: 1;
+}
+.navbar__menu-btn {
+  display: none;
+}
+.navbar__menu-open {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 86px;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background-color: white;
+}
+.navbar__icons {
+  display: flex;
+  align-items: center;
+}
+@media only screen and (max-width: 768px) {
+  .navbar__menu-btn {
+    display: block;
+  }
+  nav {
+    display: none;
+  }
+  .navbar__menu-open {
+    display: flex;
+  }
+}
+</style>

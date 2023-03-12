@@ -218,7 +218,6 @@ export default {
 }
 .v-row {
   float: center;
-  margin-left: 50px;
 }
 .img {
   background: none;

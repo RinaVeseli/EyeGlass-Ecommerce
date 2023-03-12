@@ -91,7 +91,7 @@
       <v-btn color="white" class="mr-4"
         ><router-link
           class="text-black"
-          :to="{ name: `Dashboard` }"
+          :to="{ name: `dashboard` }"
           color="white"
         >
           Cancel
@@ -164,7 +164,9 @@ export default {
         this.imageCover = '';
         this.images = '';
 
-        this.$router.push('/dashboard/eyeglasses/eyeglasses-list');
+        this.$router.push(
+          '/admin/dashboard/eyeglasses/eyeglasses-list'
+        );
       } catch (err) {
         console.log(err);
       }

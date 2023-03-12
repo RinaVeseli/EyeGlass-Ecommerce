@@ -14,10 +14,7 @@
       />
     </div>
   </div>
-  <router-link
-    class="hero__product-link"
-    to="/product/xx99-mark-two-headphones"
-  >
+  <router-link class="hero__product-link" to="/">
     <div class="faqButton">
       <button class="hero__product-link__btn default-btn">
         All FAQ
@@ -28,33 +25,35 @@
 
 <script>
 import FAQ from './FAQ';
+import axios from 'axios';
 export default {
   name: 'app',
+
   components: {
     FAQ,
   },
   data() {
     return {
-      faqs: [
-        {
-          question: 'Who is the best Superhero?',
-          answer: "I'm not sure but we love him 3000",
-          open: false,
-        },
-        {
-          question: "What is Goku's form called with White Hair?",
-          answer: 'Mastered Ultra Instinct',
-          open: false,
-        },
-        {
-          question: 'Have you liked & subscried yet?',
-          answer: 'YES',
-          open: false,
-        },
-      ],
+      faqs: [],
     };
   },
+  created() {
+    this.getProducts();
+  },
+
   methods: {
+    async getProducts() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/faq'
+        );
+
+        this.faqs = response.data.data.data;
+        console.log(this.faqs);
+      } catch (err) {
+        console.log(err);
+      }
+    },
     toggleOpen: function (index) {
       this.faqs = this.faqs.map((faq, i) => {
         if (index === i) {
@@ -65,6 +64,9 @@ export default {
         return faq;
       });
     },
+  },
+  mounted() {
+    this.getProducts();
   },
 };
 </script>

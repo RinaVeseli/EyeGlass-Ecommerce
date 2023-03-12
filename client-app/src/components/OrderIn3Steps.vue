@@ -6,7 +6,7 @@
           <p class="homepage__heading">Order in 3 easy steps</p>
         </div>
       </div>
-      <div class="rowSteps">
+      <div class="rowSteps" v-for="item in items" :key="item._id">
         <div class="col-12 col-lg-4 mb-3 mb-lg-0">
           <div
             class="homepage__order-wrapper"
@@ -22,7 +22,7 @@
                   color: #2e2e2e;
                 "
               >
-                01
+                {{ item.number }}
               </p>
               <p
                 class="homepage__order-heading"
@@ -34,7 +34,7 @@
                   color: #2e2e2e;
                 "
               >
-                Find your contacts
+                {{ item.header }}
               </p>
               <p
                 style="
@@ -43,12 +43,12 @@
                   color: #909090;
                 "
               >
-                Pick your contacts by browsing the contacts page.
+                {{ item.description }}
               </p>
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+        <!-- <div class="col-12 col-lg-4 mb-3 mb-lg-0">
           <div
             class="homepage__order-wrapper"
             style="min-height: 100%; border-top: 10px solid #89afe0"
@@ -90,7 +90,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
           <div
             class="homepage__order-wrapper"
             style="min-height: 100%; border-top: 10px solid #0071bc"
@@ -132,11 +132,46 @@
               </p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
 </template>
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'OrderSteps',
+
+  data() {
+    return {
+      items: [],
+    };
+  },
+
+  created() {
+    this.getProducts();
+  },
+
+  methods: {
+    // Get All Products
+    async getProducts() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/orderSteps'
+        );
+
+        this.items = response.data.data.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  mounted() {
+    this.getProducts();
+  },
+};
+</script>
 <style>
 @media (min-width: 1200px) {
   .container {

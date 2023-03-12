@@ -5,6 +5,7 @@ import 'bulma/css/bulma.css';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import DashboardVue from './views/pages/Dashboard/Dashboard.vue';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
@@ -25,8 +26,9 @@ let app;
 firebase.auth().onAuthStateChanged((user) => {
   console.log(user);
   if (user) {
-    user.getIdToken().then(idToken => {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+    user.getIdToken().then((idToken) => {
+      axios.defaults.headers.common['Authorization'] =
+        'Bearer ' + idToken;
     });
   } else {
     delete axios.defaults.headers.common['Authorization'];
@@ -39,4 +41,5 @@ firebase.auth().onAuthStateChanged((user) => {
 
       .mount('#app');
   }
+  app.component('Dashboard', DashboardVue);
 });

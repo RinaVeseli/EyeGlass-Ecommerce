@@ -23,6 +23,28 @@ const routes = [
       ),
   },
   {
+    path: '/contacts',
+    name: 'contacts',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "contacts" */ '../views/pages/Contacts.vue'
+      ),
+  },
+  {
+    path: `/contacts/contacts-details/:_id`,
+    name: 'contacts-details',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "contacts" */ '../views/pages/ContactsDetails.vue'
+      ),
+  },
+  {
     path: '/glasses',
     name: 'glasses',
     component: () =>
@@ -203,7 +225,115 @@ const routes = [
         name: 'EditEye',
         component: () =>
           import(
-            /* webpackChunkName: "Edit" */ '../components/eyeglasses/EditEyeglasses.vue'
+            /* webpackChunkName: "EditEye" */ '../components/eyeglasses/EditEyeglasses.vue'
+          ),
+      },
+      {
+        path: 'contacts/contacts-list',
+        name: 'ContactsList',
+        component: () =>
+          import(
+            /* webpackChunkName: "ContactsList" */ '../components/Dashboard/contacts/ContactsList.vue'
+          ),
+      },
+      {
+        path: 'contacts/create',
+        name: 'AddContacts',
+        component: () =>
+          import(
+            /* webpackChunkName: "AddContacts" */ '../components/Dashboard/contacts/AddContacts.vue'
+          ),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: `contacts/editContacts/:_id`,
+        name: 'EditContacts',
+        component: () =>
+          import(
+            /* webpackChunkName: "EditContacts" */ '../components/Dashboard/contacts/EditContacts.vue'
+          ),
+      },
+      {
+        path: 'orderSteps',
+        name: 'OrderSteps',
+        component: () =>
+          import(
+            /* webpackChunkName: "OrderSteps" */ '../components/Dashboard/orderSteps/OrderSteps.vue'
+          ),
+      },
+      {
+        path: 'orderSteps/create',
+        name: 'CreateOrderStep',
+        component: () =>
+          import(
+            /* webpackChunkName: "CreateOrderStep" */ '../components/Dashboard/orderSteps/AddOrderSteps.vue'
+          ),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: `orderSteps/editOrderStep/:_id`,
+        name: 'EditOrderStep',
+        component: () =>
+          import(
+            /* webpackChunkName: "EditOrderStep" */ '../components/Dashboard/orderSteps/EditOrderStep.vue'
+          ),
+      },
+      {
+        path: 'faqs',
+        name: 'Faqs',
+        component: () =>
+          import(
+            /* webpackChunkName: "Faqs" */ '../components/Dashboard/Faqs/FaqList.vue'
+          ),
+      },
+      {
+        path: 'faqs/create',
+        name: 'CreateFaq',
+        component: () =>
+          import(
+            /* webpackChunkName: "CreateFaq" */ '../components/Dashboard/Faqs/AddFaq.vue'
+          ),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: `faqs/editFaqs/:_id`,
+        name: 'EditFaq',
+        component: () =>
+          import(
+            /* webpackChunkName: "EditFaq" */ '../components/Dashboard/Faqs/EditFaq.vue'
+          ),
+      },
+      {
+        path: 'shapes',
+        name: 'Shapes',
+        component: () =>
+          import(
+            /* webpackChunkName: "Faqs" */ '../components/Dashboard/shape/ShapeList.vue'
+          ),
+      },
+      {
+        path: 'shapes/create',
+        name: 'CreateShape',
+        component: () =>
+          import(
+            /* webpackChunkName: "CreateFaq" */ '../components/Dashboard/shape/AddShape.vue'
+          ),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: `shapes/editShapes/:_id`,
+        name: 'EditShape',
+        component: () =>
+          import(
+            /* webpackChunkName: "EditFaq" */ '../components/Dashboard/shape/EditShape.vue'
+          ),
+      },
+      {
+        path: 'contacts',
+        name: 'Contact',
+        component: () =>
+          import(
+            /* webpackChunkName: "Faqs" */ '../components/Dashboard/contactus/ContactList.vue'
           ),
       },
       {

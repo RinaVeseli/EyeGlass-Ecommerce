@@ -70,7 +70,7 @@
       ><v-btn color="white" class="mr-4"
         ><router-link
           class="text-black"
-          :to="{ name: `Dashboard` }"
+          :to="{ name: `dashboard` }"
           color="white"
         >
           Cancel

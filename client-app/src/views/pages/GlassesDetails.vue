@@ -282,7 +282,6 @@ export default {
 }
 .imgFrame,
 .desc {
-  display: flex;
   justify-content: center;
 }
 .imgFrame img {

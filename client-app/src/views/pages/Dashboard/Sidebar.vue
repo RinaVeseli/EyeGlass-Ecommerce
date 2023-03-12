@@ -2,7 +2,7 @@
   <div class="menu" :class="{ 'small-menu': smallMenu }">
     <div class="text-center mt-3">
       <v-divider color="white" class="mt-3"></v-divider>
-      <v-avatar class="my-4 m-3" size="40">
+      <v-avatar class="my-4" size="40">
         <v-img
           src="http://cdn.onlinewebfonts.com/svg/img_569204.png"
           class="image"
@@ -73,12 +73,39 @@ export default {
             path: '/admin/dashboard/about-list',
           },
           {
-            label: 'Faqs',
-            path: '/admin/dashboard/faqs',
+            label: 'OrderSteps',
+            children: [
+              {
+                label: 'Details',
+                path: '/admin/dashboard/orderSteps',
+              },
+              {
+                label: 'Create',
+                path: '/admin/dashboard/orderSteps/create',
+              },
+            ],
           },
           {
-            label: 'contact',
-            path: '/admin/dashboard/contact',
+            label: 'Faqs',
+            children: [
+              {
+                label: 'Details',
+                path: '/admin/dashboard/faqs',
+              },
+              {
+                label: 'Create',
+                path: '/admin/dashboard/faqs/create',
+              },
+            ],
+          },
+          {
+            label: 'Contact-Us',
+            children: [
+              {
+                label: 'Details',
+                path: '/admin/dashboard/contacts',
+              },
+            ],
           },
         ],
       },
@@ -87,15 +114,15 @@ export default {
         icon: faUserShield,
         children: [
           {
-            label: 'Contact',
+            label: 'Contacts',
             children: [
               {
                 label: 'Details',
-                path: '/admin/products/shapes/details',
+                path: '/admin/dashboard/contacts/contacts-list',
               },
               {
                 label: 'Create',
-                path: '/admin/products/shapes/create',
+                path: '/admin/dashboard/contacts/create',
               },
             ],
           },
@@ -147,15 +174,16 @@ export default {
             ],
           },
           {
-            label: 'Category',
+            label: 'Shapes',
+
             children: [
               {
                 label: 'Details',
-                path: '/admin/dashboard/brand/brand-list',
+                path: '/admin/dashboard/shapes',
               },
               {
                 label: 'Create',
-                path: '/admin/dashboard/brand/create',
+                path: '/admin/dashboard/shapes/create',
               },
             ],
           },

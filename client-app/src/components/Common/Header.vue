@@ -1,21 +1,45 @@
 <template>
-  <v-app-bar app color="white" dark style="height: 86px">
-    <v-divider vertical class="ml-1 mr-3"></v-divider>
-    <img class="text-lg-center" :src="logo" />
-    <v-spacer></v-spacer>
-    <nav>
+  <v-app-bar
+    app
+    color="white"
+    dark
+    class="navbar"
+    style="height: 86px"
+  >
+    <div class="navbar__logo">
+      <img :src="logo" />
+    </div>
+    <v-btn
+      icon
+      class="navbar__menu-btn"
+      @click="isMenuOpen = !isMenuOpen"
+    >
+      <v-icon>mdi-menu</v-icon>
+    </v-btn>
+    <nav :class="{ 'navbar__menu-open': isMenuOpen }">
       <ul>
-        <li v-for="item in navigationItems" v-bind:key="item.name" style="margin-top: 25px; margin-right: 10px">
+        <li
+          v-for="item in navigationItems"
+          v-bind:key="item.name"
+          style="margin-top: 25px; margin-right: 10px"
+        >
           <router-link v-bind:to="item.path">
             {{ item.name }}
           </router-link>
         </li>
-        <li style="margin-top: 25px; margin-right: 10px" class="controls">
+        <li
+          style="margin-top: 25px; margin-right: 10px"
+          class="controls"
+        >
           <div v-if="signIn">
             <button @click="signOut">LOG OUT</button>
           </div>
           <div v-else>
-            <router-link to="/register" style="margin-top: 25px; margin-right: 25px">REGISTER</router-link>
+            <router-link
+              to="/register"
+              style="margin-top: 25px; margin-right: 25px"
+              >REGISTER</router-link
+            >
             <router-link :to="{ name: 'login' }">LOGIN</router-link>
           </div>
         </li>
@@ -33,9 +57,7 @@
           </router-link>
           <router-link to="/orders">
             <v-list-item>
-              <v-list-item-title>
-                Orders
-              </v-list-item-title>
+              <v-list-item-title> Orders </v-list-item-title>
             </v-list-item>
           </router-link>
         </v-list>
@@ -68,12 +90,13 @@ export default {
     this.setupFirebase();
   },
   created() {
-    axios.get('http://localhost:3000/api/v1/cart')
-      .then(response => {
+    axios
+      .get('http://localhost:3000/api/v1/cart')
+      .then((response) => {
         this.cartLength = response.data.result;
-        console.log(response.data)
+        console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   },
@@ -145,6 +168,7 @@ img {
 }
 
 nav {
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 }
@@ -176,5 +200,45 @@ li:hover {
 
 .controls:hover {
   transform: none;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+.navbar__logo {
+  flex: 1;
+}
+.navbar__menu-btn {
+  display: none;
+}
+.navbar__menu-open {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 86px;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background-color: white;
+}
+.navbar__icons {
+  display: flex;
+  align-items: center;
+}
+@media only screen and (max-width: 768px) {
+  .navbar__menu-btn {
+    display: block;
+  }
+  nav {
+    display: none;
+  }
+  .navbar__menu-open {
+    display: flex;
+  }
 }
 </style>

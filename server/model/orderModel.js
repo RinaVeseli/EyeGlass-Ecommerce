@@ -7,8 +7,7 @@ const orderSchema = new mongoose.Schema({
   },
   cartItems: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'CartItem',
-    required: true
+    ref: 'EyeGlasses'
   }],
   totalPrice: {
     type: Number,

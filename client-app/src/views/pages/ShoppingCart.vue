@@ -76,7 +76,8 @@ export default {
     data() {
         return {
             items: [],
-            itemTotal: 0
+            itemTotal: 0,
+            eyeglasses: []
         }
     },
     computed: {
@@ -94,6 +95,9 @@ export default {
             .then(response => {
                 this.items = response.data.data.cartItems;
                 console.log(response.data)
+                this.items.forEach((item) => {
+                    this.eyeglasses.push(item.eyeglasses)
+                })
             })
             .catch(error => {
                 console.error(error);
@@ -131,7 +135,7 @@ export default {
         async addOrder(){
             try {
                 await axios.post('http://localhost:3000/api/v1/order',{
-                cartItems: this.items,
+                cartItems: this.eyeglasses,
                 totalPrice: this.total
             }).then(res => {
                 console.log(res);

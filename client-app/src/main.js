@@ -5,15 +5,10 @@ import 'bulma/css/bulma.css';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-// import DashboardVue from './views/pages/Dashboard/Dashboard.vue';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-// import { getAuth, connectAuthEmulator } from 'firebase/auth';
-// import {
-//   getFunctions,
-//   connectFunctionsEmulator,
-// } from 'firebase/functions';
+import axios from 'axios';
 
 loadFonts();
 const firebaseConfig = {
@@ -27,12 +22,16 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 let app;
-// connectAuthEmulator(getAuth(), 'http://127.0.0.1:9099');
-
-// connectFunctionsEmulator(getFunctions(), 'http://127.0.0.1:5001');
 
 firebase.auth().onAuthStateChanged((user) => {
   console.log(user);
+  if (user) {
+    user.getIdToken().then(idToken => {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + idToken;
+    });
+  } else {
+    delete axios.defaults.headers.common['Authorization'];
+  }
   if (!app) {
     createApp(App)
       .use(router)
@@ -41,5 +40,4 @@ firebase.auth().onAuthStateChanged((user) => {
 
       .mount('#app');
   }
-  // app.component('Dashboard', DashboardVue);
 });

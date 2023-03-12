@@ -49,15 +49,15 @@ const routes = [
         /* webpackChunkName: "portfolio"  */ '../views/pages/Contact-us.vue'
       ),
   },
-  {
-    path: '/create',
-    name: 'Create',
-    component: () =>
-      import(
-        /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
-      ),
-    meta: { isAdmin: true },
-  },
+  // {
+  //   path: '/create',
+  //   name: 'Create',
+  //   component: () =>
+  //     import(
+  //       /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
+  //     ),
+  //   meta: { isAdmin: true },
+  // },
   {
     path: `/edit/:_id`,
     name: 'Edit',
@@ -139,7 +139,6 @@ const routes = [
           import(
             /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `brand/edit/:_id`,
@@ -164,7 +163,6 @@ const routes = [
           import(
             /* webpackChunkName: "create" */ '../components/eyeglasses/AddEyeglasses.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `eyeglasses/editEyeglasses/:_id`,

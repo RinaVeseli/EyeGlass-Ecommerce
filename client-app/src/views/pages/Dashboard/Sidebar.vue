@@ -9,7 +9,7 @@
           class="image"
         ></v-img>
       </v-avatar>
-      <h1 class="black--text">Hello {{ currentUser.email }}</h1>
+      <h1 v-if="currentUser" class="black--text">Hello {{ currentUser.email }}</h1>
     </div>
     <MenuItem
       v-for="(item, index) in menuTree"

@@ -5,11 +5,11 @@ import 'bulma/css/bulma.css';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import DashboardVue from './views/pages/Dashboard/Dashboard.vue';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
+
 loadFonts();
 const firebaseConfig = {
   apiKey: 'AIzaSyAcR6-Zm_oj-3mOXKxEbsJnaCIVndVNIkk',
@@ -41,5 +41,4 @@ firebase.auth().onAuthStateChanged((user) => {
 
       .mount('#app');
   }
-  app.component('Dashboard', DashboardVue);
 });

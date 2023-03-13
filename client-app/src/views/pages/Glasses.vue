@@ -58,14 +58,14 @@
           @add-to-cart="addToCart"
         ></GlassCard>
       </div>
-      <div class="cart">
+      <!-- <div class="cart">
         <h2>Cart</h2>
         <ul>
           <li v-for="product in cartItems" :key="product.id">
             {{ product.name }} - {{ product.price }}
           </li>
         </ul>
-      </div>
+      </div> -->
     </section>
   </div>
   <Footer />

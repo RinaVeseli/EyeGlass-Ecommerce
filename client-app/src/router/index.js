@@ -146,6 +146,14 @@ const routes = [
       ),
   },
   {
+    path: '/wishlist',
+    name: 'wishlist',
+    component: () => 
+      import (
+        /* webpackChunkName: "wishlist" */ '../views/user/Wishlist.vue'
+      ),
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: () =>

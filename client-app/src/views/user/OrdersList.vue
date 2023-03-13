@@ -64,8 +64,7 @@ export default {
         return {
             logo: logo,
             show: false,
-            orders: [],
-            counter: 0
+            orders: []
         }
     },
     created() {

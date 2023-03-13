@@ -52,11 +52,11 @@ const deleteCartItem = async (req, res) => {
   const cartItemId = req.params.id;
   CartItem.deleteOne({ _id: cartItemId })
     .then(() => {
-      res.sendStatus(204); // Successfully deleted
+      res.sendStatus(204); 
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(500); // Internal server error
+      res.sendStatus(500); 
     });
 }
 

@@ -19,6 +19,7 @@ const getAuthToken = require('./middleware/getAuthToken');
 const aboutRoute = require('./routes/aboutRoute');
 const shoppingCartRoutes = require('./routes/shopingCartRoutes');
 const orderRouter = require('./routes/orderRoutes');
+const wishlistRouter = require('./routes/wishlistRoutes');
 // const admin = require('./services/firebase');
 //Middleware
 
@@ -52,6 +53,7 @@ app.use('/api/v1/shape', shapeRoute);
 app.use('/api/v1/contacts', contactsRoute);
 app.use('/api/v1/cart', shoppingCartRoutes);
 app.use('/api/v1/order', orderRouter);
+app.use('/api/v1/wishlist', wishlistRouter);
 app.all('*', (req, res, next) => {
   next(
     new AppError(`Can't find ${req.originalUrl} on this server!`, 404)

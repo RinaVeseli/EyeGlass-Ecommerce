@@ -4,21 +4,12 @@
     <div class="maindetails">
       <div class="img">
         <v-card max-width="944" height="500" class="mx-auto">
-          <v-carousel
-            :continuous="true"
-            :show-arrows="true"
-            hide-delimiter-background
-            delimiter-icon="mdi-circle"
-            height="460"
-          >
+          <v-carousel :continuous="true" :show-arrows="true" hide-delimiter-background delimiter-icon="mdi-circle"
+            height="460">
             <v-carousel-item v-for="(slide, i) in slides" :key="i">
-              <img
-                :src="
-                  'http://localhost:3000/img/eyeglasses/' + images[i]
-                "
-                height="100%"
-                tile
-              />
+              <img :src="
+                'http://localhost:3000/img/eyeglasses/' + images[i]
+              " height="100%" tile />
             </v-carousel-item>
           </v-carousel>
         </v-card>
@@ -29,8 +20,9 @@
             <h1>{{ name }}</h1>
             <h2>Rating: {{ ratingsAverage }}</h2>
           </div>
-          <v-btn icon class="mx-1">
-            <v-icon>mdi-heart-outline</v-icon>
+          <v-btn @click="addEyeglassToWishlistOrDeleteEyeglassFromWishlist($route.params._id)" icon class="mx-1">
+            <v-icon v-if="wishlistButton === false">mdi-heart-outline</v-icon>
+            <v-icon v-else>mdi-heart</v-icon>
           </v-btn>
         </div>
         <div class="priceCoupon">
@@ -58,7 +50,9 @@
             Size : <b>{{ size }}</b>
           </h1>
         </div>
-        <button @click="addToCart($route.params._id)" :disabled="isInCart" class="addtocart"><p>{{cartText}}</p></button>
+        <button @click="addToCart($route.params._id)" :disabled="isInCart" class="addtocart">
+          <p>{{ cartText }}</p>
+        </button>
       </div>
     </div>
     <div class="productDescr">
@@ -66,9 +60,7 @@
 
       <div class="descBox">
         <div class="imgFrame">
-          <img
-            src="https://cdn.shopify.com/s/files/1/0580/0506/1839/files/Size_Chart_480x480.jpg?v=1624999929"
-          />
+          <img src="https://cdn.shopify.com/s/files/1/0580/0506/1839/files/Size_Chart_480x480.jpg?v=1624999929" />
         </div>
         <div class="desc">
           <div class="paragraph">
@@ -129,11 +121,13 @@ export default {
       slides: ['First', 'Second', 'Third', 'Fourth'],
       isInCart: false,
       cartText: 'Add To Cart',
+      wishlistButton: false,
     };
   },
   created: function () {
     this.getProductById();
     this.checkCart();
+    this.getUsersWishlist();
   },
   methods: {
     // Get Product By Id
@@ -157,7 +151,7 @@ export default {
         console.log(err);
       }
     },
-    async addToCart(id){
+    async addToCart(id) {
       try {
         await axios.post(`http://localhost:3000/api/v1/cart/${id}`);
         this.isInCart = true;
@@ -167,8 +161,8 @@ export default {
         console.log(error);
       }
     },
-    
-  checkCart() {
+
+    checkCart() {
       // fetch cart data from server
       axios.get('http://localhost:3000/api/v1/cart').then(response => {
         // check if product is already in cart
@@ -179,6 +173,42 @@ export default {
         }
       });
     },
+    async addEyeglassToWishlistOrDeleteEyeglassFromWishlist(eyeglassesId) {
+      if (this.wishlistButton === false) {
+        try {
+          await axios.post("http://localhost:3000/api/v1/wishlist", {
+            eyeglassesId: eyeglassesId
+          });
+          this.wishlistButton = true;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      else if (this.wishlistButton === true) {
+        try {
+          await axios.delete(`http://localhost:3000/api/v1/wishlist/${eyeglassesId}`);
+          this.wishlistButton = false;
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    },
+    async getUsersWishlist() {
+      await axios.get('http://localhost:3000/api/v1/wishlist')
+        .then(response => {
+          const wishlist = response.data.data.wishlist;
+          const eyeglasses = [];
+          wishlist.forEach((item) => {
+            eyeglasses.push(item.eyeglasses._id)
+          })
+          this.wishlistButton = eyeglasses.includes(this.$route.params._id);
+          console.log(response);
+          console.log(eyeglasses)
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
 }
 
@@ -197,15 +227,18 @@ export default {
   align-items: center;
   height: 750px;
 }
+
 .mx-auto {
   border: none;
 }
+
 .mainDetail {
   margin-left: -130px;
   width: 29.125vw;
   max-width: 540px;
   min-width: 450px;
 }
+
 .details {
   display: flex;
   flex-wrap: nowrap;
@@ -214,26 +247,31 @@ export default {
   align-items: center;
   width: 100%;
 }
+
 .nameRating h1 {
   font-size: 30px;
   font-weight: 700;
   padding: 15px 0;
 }
+
 .nameRating h2 {
   font-size: 20px;
 }
+
 .img img {
   width: 900px;
   height: auto;
   object-fit: cover;
   border-radius: 40px;
 }
+
 .priceCoupon {
   margin: 1.875vw 0 0;
   padding: 1.5625vw 1.354vw 0.5vw;
   background: #f5f6f8;
   border-radius: 5px;
 }
+
 .couponsDetails {
   margin: 20px 0;
   display: flex;
@@ -242,6 +280,7 @@ export default {
   flex-direction: row;
   align-items: center;
 }
+
 .payments {
   margin-top: 8px;
   display: flex;
@@ -251,6 +290,7 @@ export default {
   height: 80px;
   align-items: center;
 }
+
 .payments h3 {
   background-color: #bacfe8;
   color: white;
@@ -258,10 +298,12 @@ export default {
   border-radius: 10px;
   margin: 10px;
 }
+
 .color,
 .size {
   margin: 10px;
 }
+
 .addtocart {
   width: 100%;
   background-color: #0071bc;
@@ -269,34 +311,42 @@ export default {
   border-radius: 10px;
   height: 80px;
 }
+
 .addtocart p {
   font-size: 30px;
 }
+
 .productDescr {
   padding: 40px;
 }
+
 .productDescr h1 {
   text-align: center;
   font-size: 30px;
   font-weight: 400;
 }
+
 .imgFrame,
 .desc {
   justify-content: center;
 }
+
 .imgFrame img {
   width: 700px;
   height: auto;
   object-fit: cover;
 }
+
 .descBox {
   padding: 30px;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
 .desc {
   padding: 30px;
 }
+
 .otherDetails {
   width: 70%;
   display: flex;
@@ -305,10 +355,12 @@ export default {
   float: inline-start;
   align-items: center;
 }
+
 .firstColumn p,
 .SecondColumn p {
   padding: 10px;
 }
+
 .descBox {
   display: flex;
   flex-direction: column;

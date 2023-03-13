@@ -53,7 +53,11 @@
                             <td style="font-weight: bold;">Total Order:</td>
                             <td>{{ total }}€</td>
                             <td>
-                                <v-btn @click="addOrder()">
+                                <v-btn v-if="total != 0" :disabled="!disableButton" @click="addOrder()">
+                                    Buy Now!  
+                                    <v-icon>mdi-cart-outline</v-icon>
+                                </v-btn>
+                                <v-btn v-else :disabled="disableButton" @click="addOrder()">
                                     Buy Now!  
                                     <v-icon>mdi-cart-outline</v-icon>
                                 </v-btn>
@@ -77,7 +81,8 @@ export default {
         return {
             items: [],
             itemTotal: 0,
-            eyeglasses: []
+            eyeglasses: [],
+            disableButton: true 
         }
     },
     computed: {

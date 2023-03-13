@@ -1,45 +1,24 @@
 <template>
-  <v-app-bar
-    app
-    color="white"
-    dark
-    class="navbar"
-    style="height: 86px"
-  >
+  <v-app-bar app color="white" dark class="navbar" style="height: 86px">
     <div class="navbar__logo">
       <img :src="logo" />
     </div>
-    <v-btn
-      icon
-      class="navbar__menu-btn"
-      @click="isMenuOpen = !isMenuOpen"
-    >
+    <v-btn icon class="navbar__menu-btn" @click="isMenuOpen = !isMenuOpen">
       <v-icon>mdi-menu</v-icon>
     </v-btn>
     <nav :class="{ 'navbar__menu-open': isMenuOpen }">
       <ul>
-        <li
-          v-for="item in navigationItems"
-          v-bind:key="item.name"
-          style="margin-top: 25px; margin-right: 10px"
-        >
+        <li v-for="item in navigationItems" v-bind:key="item.name" style="margin-top: 25px; margin-right: 10px">
           <router-link v-bind:to="item.path">
             {{ item.name }}
           </router-link>
         </li>
-        <li
-          style="margin-top: 25px; margin-right: 10px"
-          class="controls"
-        >
+        <li style="margin-top: 25px; margin-right: 10px" class="controls">
           <div v-if="signIn">
             <button @click="signOut">LOG OUT</button>
           </div>
           <div v-else>
-            <router-link
-              to="/register"
-              style="margin-top: 25px; margin-right: 25px"
-              >REGISTER</router-link
-            >
+            <router-link to="/register" style="margin-top: 25px; margin-right: 25px">REGISTER</router-link>
             <router-link :to="{ name: 'login' }">LOGIN</router-link>
           </div>
         </li>
@@ -50,7 +29,7 @@
       <v-icon>mdi-account-outline</v-icon>
       <v-menu activator="parent" location="bottom right">
         <v-list>
-          <router-link to="/admin/dashboard">
+          <router-link to="dashboard">
             <v-list-item>
               <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
@@ -65,9 +44,11 @@
     </v-btn>
 
     <v-divider vertical class=""></v-divider>
-    <v-btn icon class="mx-1">
-      <v-icon>mdi-heart-outline</v-icon>
-    </v-btn>
+    <router-link to="/wishlist">
+      <v-btn icon class="mx-1">
+        <v-icon>mdi-heart-outline</v-icon>
+      </v-btn>
+    </router-link>
     <v-divider vertical class=""></v-divider>
     <router-link to="/shopping-cart">
       <v-btn icon class="mx-1">
@@ -208,12 +189,15 @@ li:hover {
   align-items: center;
   padding: 0 20px;
 }
+
 .navbar__logo {
   flex: 1;
 }
+
 .navbar__menu-btn {
   display: none;
 }
+
 .navbar__menu-open {
   display: flex;
   flex-direction: column;
@@ -226,17 +210,21 @@ li:hover {
   height: 200px;
   background-color: white;
 }
+
 .navbar__icons {
   display: flex;
   align-items: center;
 }
+
 @media only screen and (max-width: 768px) {
   .navbar__menu-btn {
     display: block;
   }
+
   nav {
     display: none;
   }
+
   .navbar__menu-open {
     display: flex;
   }

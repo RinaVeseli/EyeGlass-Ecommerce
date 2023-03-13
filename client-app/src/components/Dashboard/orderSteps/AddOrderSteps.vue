@@ -12,6 +12,7 @@
             label="Number"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="numberErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -20,6 +21,7 @@
             label="Header"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="headerErrors"
           ></v-text-field>
         </v-col>
 
@@ -29,6 +31,7 @@
             label="Description"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="descriptionErrors"
           ></v-text-field>
         </v-col> </v-row
       ><v-btn color="white" class="mr-4"
@@ -56,12 +59,37 @@ export default {
       number: '',
       header: '',
       description: '',
+      numberErrors: [],
+      headerErrors: [],
+      descriptionErrors: [],
     };
   },
   methods: {
     // Create New product
     async saveProduct() {
       try {
+        this.numberErrors = [];
+
+        this.headerErrors = [];
+        this.descriptionErrors = [];
+
+        if (!this.name) {
+          this.numberErrors.push('Name is required');
+        }
+
+        if (this.header.length === 0) {
+          this.headerErrors.push('Header is required');
+        }
+        if (!this.description) {
+          this.descriptionErrors.push('Description is required');
+        }
+        if (
+          this.numberErrors.length ||
+          this.headerErrors.length ||
+          this.descriptionErrors.length
+        ) {
+          return;
+        }
         await axios.post('http://localhost:3000/api/v1/orderSteps', {
           number: this.number,
           header: this.header,
@@ -74,6 +102,14 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+  },
+  computed: {
+    valid() {
+      return this.$refs.form.validate();
+    },
+    required() {
+      return (v) => !!v || 'Field is required';
     },
   },
 };

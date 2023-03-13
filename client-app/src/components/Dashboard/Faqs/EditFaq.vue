@@ -11,6 +11,7 @@
             label="Question"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="questionErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -19,6 +20,7 @@
             label="Answer"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="answerErrors"
           ></v-text-field>
         </v-col> </v-row
       ><v-btn color="white" class="mr-4"
@@ -45,6 +47,8 @@ export default {
     return {
       question: '',
       answer: '',
+      questionErrors: [],
+      answerErrors: [],
     };
   },
   created: function () {
@@ -53,6 +57,20 @@ export default {
   methods: {
     // Get Product By Id
     async getProductById() {
+      this.questionErrors = [];
+
+      this.headerErrors = [];
+      this.descriptionErrors = [];
+
+      if (!this.question) {
+        this.questionErrors.push('Question is required');
+      }
+      if (!this.answer) {
+        this.answerErrors.push('Answer is required');
+      }
+      if (this.questionErrors.length || this.answerErrors.length) {
+        return;
+      }
       try {
         const response = await axios.get(
           `http://localhost:3000/api/v1/faq/${this.$route.params._id}`

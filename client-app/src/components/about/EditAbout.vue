@@ -16,6 +16,7 @@
             label="Name"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Name is required']"
           ></v-text-field>
         </v-col>
 
@@ -25,6 +26,7 @@
             label="Founded"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Founded is required']"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -33,6 +35,7 @@
             label="Mission"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Mission is required']"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -41,6 +44,7 @@
             label="quote"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Quote is required']"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -49,6 +53,7 @@
             label="directorDesk"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Director Desk is required']"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -57,6 +62,7 @@
             label="contact"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Contact is required']"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -65,6 +71,7 @@
             label="vision"
             persistent-hint
             variant="solo"
+            :rules="[(v) => !!v || 'Vision is required']"
           ></v-text-field>
         </v-col> </v-row
       ><v-btn color="white" class="mr-4"

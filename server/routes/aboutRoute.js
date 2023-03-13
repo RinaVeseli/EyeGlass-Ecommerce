@@ -1,7 +1,7 @@
 const express = require('express');
 const aboutController = require('./../controllers/aboutController');
 const router = express.Router();
-
+const checkIfAdmin = require('../middleware/checkIfAdmin');
 router
   .route('/')
   .get(aboutController.getAbouts)

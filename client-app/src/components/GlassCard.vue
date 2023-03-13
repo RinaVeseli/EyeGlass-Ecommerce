@@ -16,7 +16,7 @@
     /></router-link>
     <div class="info">
       <div class="nameFavo d-flex">
-        <h3>Brand | {{ data.name }}</h3>
+        <h3>{{ brand }} | {{ data.name }}</h3>
 
         <button @click="addToCart">
           <i class="fa-regular fa-heart"></i>
@@ -42,18 +42,30 @@
 </template>
 
 <script>
-// import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+
 export default {
-  props: {
-    data: {
-      type: Object,
-      required: true,
+  data() {
+    return {
+      brand: '',
+    };
+  },
+  props: ['data'],
+  methods: {
+    async getBrandName(brandId) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/v1/brands/${brandId}`
+        );
+        this.brand = response.data.data.brand.name;
+        console.log(this.brand);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
-  methods: {
-    addToCart() {
-      this.$emit('add-to-cart', this.data);
-    },
+  async mounted() {
+    await this.getBrandName(this.data.brand);
   },
 };
 </script>

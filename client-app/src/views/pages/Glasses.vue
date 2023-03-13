@@ -35,6 +35,7 @@
                 type="checkbox"
                 :value="option"
                 v-model="selectedFilters[filter.id]"
+                @change="getProducts"
               />
               {{ option }}
             </label>
@@ -49,7 +50,6 @@
           src="https://marveloptics.com/wp-content/uploads/2019/06/MO_Page_Banner_1.png"
         />
       </div>
-
       <div class="product-list">
         <GlassCard
           v-for="data in items"
@@ -58,18 +58,11 @@
           @add-to-cart="addToCart"
         ></GlassCard>
       </div>
-      <!-- <div class="cart">
-        <h2>Cart</h2>
-        <ul>
-          <li v-for="product in cartItems" :key="product.id">
-            {{ product.name }} - {{ product.price }}
-          </li>
-        </ul>
-      </div> -->
     </section>
   </div>
   <Footer />
 </template>
+
 <script>
 import GlassCard from '../../components/GlassCard.vue';
 import axios from 'axios';
@@ -85,12 +78,14 @@ export default {
     return {
       items: [],
       cartItems: [],
+      // brand: '',
+      // brandId: '',
       activeAccordion: null,
       filters: [
         {
           id: 'color',
           name: 'Color',
-          options: ['Black', 'Brown', 'Silver', 'Gold', 'Red'],
+          options: ['gfdasfbvfd', 'Brown', 'Silver', 'Gold', 'Red'],
         },
         {
           id: 'shape',
@@ -106,12 +101,17 @@ export default {
         {
           id: 'brand',
           name: 'Brand',
-          options: ['Ray-Ban', 'Oakley', 'Prada', 'Gucci', 'Versace'],
+          options: ['Litisha', 'KITS', 'Lauren', 'Rain Bain'],
         },
         {
           id: 'gender',
           name: 'Gender',
           options: ['Men', 'Women', 'Unisex'],
+        },
+        {
+          id: 'name',
+          name: 'Name',
+          options: ['Migdalia', 'Women', 'Unisex'],
         },
       ],
       selectedFilters: {
@@ -119,20 +119,9 @@ export default {
         shape: [],
         brand: [],
         gender: [],
+        name: [],
       },
     };
-  },
-  computed: {
-    filteredGlasses() {
-      return this.glasses.filter((glasses) => {
-        return (
-          this.selectedFilters.color.includes(glasses.color) &&
-          this.selectedFilters.shape.includes(glasses.shape) &&
-          this.selectedFilters.brand.includes(glasses.brand) &&
-          this.selectedFilters.gender.includes(glasses.gender)
-        );
-      });
-    },
   },
   created() {
     this.getProducts();
@@ -147,10 +136,35 @@ export default {
     async getProducts() {
       try {
         const response = await axios.get(
-          'http://localhost:3000/api/v1/eyeGlasses'
+          'http://localhost:3000/api/v1/eyeGlasses',
+          {
+            params: {
+              color: this.selectedFilters.color,
+              brand: this.selectedFilters.brand,
+              name: this.selectedFilters.name,
+            },
+          }
         );
 
         this.items = response.data.data.data;
+
+        // filter items by selected filters
+        for (const filterId in this.selectedFilters) {
+          const selectedOptions = this.selectedFilters[filterId];
+          if (selectedOptions.length > 0) {
+            // if (filterId === 'brandId') {
+            //   this.items = this.items.filter((item) => {
+            //     return item.brand._id === selectedOptions;
+            //   });
+            // } else {
+            this.items = this.items.filter((item) => {
+              return selectedOptions.includes(item[filterId]);
+            });
+          }
+          // }
+        }
+
+        console.log(this.items);
       } catch (err) {
         console.log(err);
       }
@@ -158,6 +172,23 @@ export default {
   },
   mounted() {
     this.getProducts();
+
+    // axios
+    //   .get('http://localhost:3000/api/v1/brands')
+    //   .then((response) => {
+    //     this.brands = response.data.data.brands.map(
+    //       (brand) => brand.name
+    //     );
+    //     console.log(this.brands);
+    //     // update the "Brand" filter options with the fetched brands
+    //     const brandFilter = this.filters.find(
+    //       (f) => f.id === 'brand'
+    //     );
+    //     brandFilter.options = this.brands;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   },
 };
 </script>

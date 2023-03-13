@@ -12,6 +12,7 @@
             label="Name"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="nameErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -20,6 +21,7 @@
             label="Color"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="colorErrors"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -30,6 +32,7 @@
             label="Material"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="materialErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -38,6 +41,7 @@
             label="Price"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="priceErrors"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -49,6 +53,7 @@
             label="Description"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="descriptionErrors"
           ></v-text-field> </v-col
         ><v-col cols="12" sm="6">
           <v-file-input
@@ -95,6 +100,11 @@ export default {
       description: '',
       imageCover: '',
       images: '',
+      nameErrors: [],
+      colorErrors: [],
+      materialErrors: [],
+      priceErrors: [],
+      descriptionErrors: [],
     };
   },
   created: function () {
@@ -122,6 +132,36 @@ export default {
 
     // Update product
     async updateProduct() {
+      this.nameErrors = [];
+      this.colorErrors = [];
+      this.materialErrors = [];
+      this.priceErrors = [];
+      this.descriptionErrors = [];
+
+      if (!this.name) {
+        this.nameErrors.push('Name is required');
+      }
+      if (!this.color) {
+        this.colorErrors.push('Color is required');
+      }
+      if (!this.material) {
+        this.materialErrors.push('Material is required');
+      }
+      if (!this.price) {
+        this.priceErrors.push('Price is required');
+      }
+      if (!this.description) {
+        this.descriptionErrors.push('Description is required');
+      }
+      if (
+        this.nameErrors.length ||
+        this.colorErrors.length ||
+        this.materialErrors.length ||
+        this.priceErrors.length ||
+        this.descriptionErrors.length
+      ) {
+        return;
+      }
       try {
         const formData = new FormData();
         formData.append('imageCover', this.$refs.fileInput.files[0]);

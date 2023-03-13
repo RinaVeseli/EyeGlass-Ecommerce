@@ -17,6 +17,7 @@
             label="Enter your name"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="nameErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -25,6 +26,7 @@
             label="Contact number"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="numberErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="12" class="v-email">
@@ -33,6 +35,7 @@
             label="Enter your email address"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="emailErrors"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -48,6 +51,7 @@
         clearable
         label="Enquiry"
         variant="solo"
+        v-bind:error-messages="enquiryErrors"
       ></v-textarea>
       <div class="btns">
         <v-btn @click="saveProduct" class="submitBtn"> Submit </v-btn>
@@ -73,11 +77,43 @@ export default {
       number: '',
       email: '',
       enquiry: '',
+      nameErrors: [],
+      numberErrors: [],
+      emailErrors: [],
+      enquiryErrors: [],
     };
   },
   methods: {
     // Create New product
     async saveProduct() {
+      this.nameErrors = [];
+      this.numberErrors = [];
+      this.emailErrors = [];
+      this.enquiryErrors = [];
+
+      if (!this.name) {
+        this.nameErrors.push('Name is required');
+      }
+      if (!this.number) {
+        this.numberErrors.push('Color is required');
+      }
+      if (!this.email) {
+        this.emailErrors.push('Material is required');
+      }
+      if (!this.enquiry) {
+        this.enquiryErrors.push('Price is required');
+      }
+      if (!this.description) {
+        this.descriptionErrors.push('Description is required');
+      }
+      if (
+        this.nameErrors.length ||
+        this.numberErrors.length ||
+        this.emailErrors.length ||
+        this.enquiryErrors.length
+      ) {
+        return;
+      }
       try {
         await axios.post('http://localhost:3000/api/v1/contact', {
           name: this.name,

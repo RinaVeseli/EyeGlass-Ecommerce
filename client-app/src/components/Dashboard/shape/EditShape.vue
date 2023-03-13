@@ -11,6 +11,7 @@
             label="Shape"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="shapeErrors"
           ></v-text-field>
         </v-col> </v-row
       ><v-btn color="white" class="mr-4"
@@ -36,6 +37,7 @@ export default {
   data() {
     return {
       shape: '',
+      shapeErrors: [],
     };
   },
   created: function () {
@@ -44,6 +46,10 @@ export default {
   methods: {
     // Get Product By Id
     async getProductById() {
+      this.shapeErrors = [];
+      if (!this.shape) {
+        this.shapeErrors.push('Shape is required');
+      }
       try {
         const response = await axios.get(
           `http://localhost:3000/api/v1/shape/${this.$route.params._id}`

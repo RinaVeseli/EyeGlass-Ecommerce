@@ -1,7 +1,7 @@
 const express = require('express');
 const eyeGlassesController = require('./../controllers/eyeGlassesController');
 const router = express.Router();
-
+const checkIfAdmin = require('../middleware/checkIfAdmin');
 //for price at glasses price
 
 // router.route('/brand-stats').get(brandController.getBrandStats);
@@ -17,19 +17,21 @@ router
   .route('/')
   .get(eyeGlassesController.getAllEyeGlasses)
   .post(
+    checkIfAdmin,
     eyeGlassesController.uploadEyeglassesImages,
     eyeGlassesController.resizeEyeglassesImages,
-    eyeGlassesController.createEyeGlass
+    eyeGlassesController.createEyeglass
   );
 
 router
   .route('/:id')
   .get(eyeGlassesController.getEyeGlass)
   .patch(
+    checkIfAdmin,
     eyeGlassesController.uploadEyeglassesImages,
     eyeGlassesController.resizeEyeglassesImages,
     eyeGlassesController.updateEyeGlass
   )
-  .delete(eyeGlassesController.deleteEyeGlass);
+  .delete(checkIfAdmin, eyeGlassesController.deleteEyeGlass);
 
 module.exports = router;

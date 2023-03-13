@@ -106,7 +106,7 @@ export default {
         {
           id: 'brand',
           name: 'Brand',
-          options: ['Ray-Ban', 'Oakley', 'Prada', 'Gucci', 'Versace'],
+          options: ['Litisha', 'KITS', 'Lauren', 'Rain Bain'],
         },
         {
           id: 'gender',

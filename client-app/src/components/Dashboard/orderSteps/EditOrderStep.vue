@@ -11,6 +11,7 @@
             label="Number"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="numberErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -19,6 +20,7 @@
             label="Header"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="headerErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -27,6 +29,7 @@
             label="Description"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="descriptionErrors"
           ></v-text-field>
         </v-col> </v-row
       ><v-btn color="white" class="mr-4"
@@ -54,6 +57,9 @@ export default {
       number: '',
       header: '',
       description: '',
+      numberErrors: [],
+      headerErrors: [],
+      descriptionErrors: [],
     };
   },
   created: function () {
@@ -77,6 +83,28 @@ export default {
 
     // Update product
     async updateProduct() {
+      this.numberErrors = [];
+
+      this.headerErrors = [];
+      this.descriptionErrors = [];
+
+      if (!this.name) {
+        this.numberErrors.push('Name is required');
+      }
+
+      if (this.header.length === 0) {
+        this.headerErrors.push('Header is required');
+      }
+      if (!this.description) {
+        this.descriptionErrors.push('Description is required');
+      }
+      if (
+        this.numberErrors.length ||
+        this.headerErrors.length ||
+        this.descriptionErrors.length
+      ) {
+        return;
+      }
       try {
         await axios.patch(
           `http://localhost:3000/api/v1/orderSteps/${this.$route.params._id}`,

@@ -26,7 +26,7 @@ const brandSchema = new mongoose.Schema(
     },
     products: {
       type: [String],
-      required: [true, 'Services must have a name'],
+      required: [true, 'Products must have a name'],
       enum: {
         values: ['glasses', 'lenses'],
         message: 'Product is either: glasses, lenses',
@@ -40,7 +40,9 @@ const brandSchema = new mongoose.Schema(
       default: Date.now,
       select: false,
     },
-    eyeglasses: [{ type: Schema.Types.ObjectId, ref: 'EyeGlasses' }],
+    eyeglasses: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'EyeGlasses' },
+    ],
   },
   {
     toJSON: { virtuals: true },

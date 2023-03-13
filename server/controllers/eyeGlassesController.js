@@ -1,4 +1,5 @@
 const EyeGlasses = require('./../model/eyeGlassesModel');
+const Brand = require('./../model/brandModel');
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -75,6 +76,39 @@ exports.resizeEyeglassesImages = catchAsync(
 
 exports.getAllEyeGlasses = factory.getAll(EyeGlasses);
 exports.getEyeGlass = factory.getOne(EyeGlasses, { path: 'reviews' });
-exports.createEyeGlass = factory.createOne(EyeGlasses);
+exports.createEyeglass = async (req, res) => {
+  try {
+    // Check if the brand exists
+    const brand = await Brand.findById(req.body.brandId);
+    if (!brand) {
+      return res.status(400).json({ error: 'Brand not found' });
+    }
+
+    // Create the new eyeglass
+    const eyeglass = await EyeGlasses.create({
+      name: req.body.name,
+      color: req.body.color,
+      frameSize: req.body.frameSize,
+      price: req.body.price,
+      brand: req.body.brandId,
+      imageCover: req.body.imageCover,
+      images: req.body.images,
+    });
+
+    // Add the eyeglass to the brand's list of eyeglasses
+    brand.eyeglasses.push(eyeglass);
+    await brand.save();
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        eyeglass,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 exports.updateEyeGlass = factory.updateOne(EyeGlasses);
 exports.deleteEyeGlass = factory.deleteOne(EyeGlasses);

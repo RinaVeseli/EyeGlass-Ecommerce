@@ -52,13 +52,14 @@ const eyeGlassesSchema = new mongoose.Schema({
     //     'Discount price ({VALUE}) should be below regular price',
     // },
   },
-  description: {
-    type: String,
-    trim: true,
+  brand: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Brand',
+    required: [true, 'An eyeglass must have a brand'],
   },
   imageCover: {
     type: String,
-    required: [true, 'An eyeglass must have an image'],
+    // required: [true, 'An eyeglass must have an image'],
   },
   images: [String],
   createdAt: {
@@ -68,5 +69,13 @@ const eyeGlassesSchema = new mongoose.Schema({
   },
 });
 const EyeGlasses = mongoose.model('EyeGlasses', eyeGlassesSchema);
-
+EyeGlasses.find()
+  .populate('brand')
+  .exec((err, eyeglasses) => {
+    if (err) {
+      console.error(err);
+    } else {
+      return eyeglasses;
+    }
+  });
 module.exports = EyeGlasses;

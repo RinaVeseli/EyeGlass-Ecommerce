@@ -12,6 +12,7 @@
             label="Question"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="questionErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -20,6 +21,7 @@
             label="Answer"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="answerErrors"
           ></v-text-field>
         </v-col> </v-row
       ><v-btn color="white" class="mr-4"
@@ -46,11 +48,27 @@ export default {
     return {
       question: '',
       answer: '',
+      questionErrors: [],
+      answerErrors: [],
     };
   },
   methods: {
     // Create New product
     async saveProduct() {
+      this.questionErrors = [];
+
+      this.headerErrors = [];
+      this.descriptionErrors = [];
+
+      if (!this.question) {
+        this.questionErrors.push('Question is required');
+      }
+      if (!this.answer) {
+        this.answerErrors.push('Answer is required');
+      }
+      if (this.questionErrors.length || this.answerErrors.length) {
+        return;
+      }
       try {
         await axios.post('http://localhost:3000/api/v1/faq', {
           question: this.question,

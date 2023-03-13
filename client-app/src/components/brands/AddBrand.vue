@@ -1,102 +1,3 @@
-<!-- <template>
-  <div>
-    <div class="field">
-      <label class="label">Product Name</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          required
-          placeholder="Product Name"
-          v-model="name"
-        />
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">founded</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="founded"
-          v-model="founded"
-        />
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">products</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="products"
-          v-model="products"
-        />
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="label">createdIn</label>
-      <div class="control">
-        <input
-          class="input"
-          type="text"
-          placeholder="createdIn"
-          v-model="createdIn"
-        />
-      </div>
-    </div>
-
-    <div class="control">
-      <button class="button is-success" @click="saveProduct">
-        SAVE
-      </button>
-    </div>
-  </div>
-</template> -->
-<!-- <template>
-  <v-form>
-    <v-container>
-      <v-row>
-        <v-col cols="12" sm="6">
-          <v-text-field
-            v-model="name"
-            label="Name"
-            variant="underlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6">
-          <v-text-field
-            v-model="founded"
-            label="Name"
-            variant="underlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6">
-          <v-text-field
-            v-model="products"
-            label="Name"
-            variant="underlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6">
-          <v-text-field
-            v-model="createdIn"
-            label="Name"
-            variant="underlined"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <div class="control">
-        <button class="button is-success" @click="saveProduct">
-          SAVE
-        </button>
-      </div>
-    </v-container>
-  </v-form>
-</template> -->
 <template>
   <v-form class="p-6">
     <v-container>
@@ -109,8 +10,10 @@
           <v-text-field
             v-model="name"
             label="Name"
+            required
             persistent-hint
             variant="solo"
+            v-bind:error-messages="nameErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -126,8 +29,11 @@
           <v-text-field
             v-model="products"
             label="Products"
+            required
             persistent-hint
             variant="solo"
+            hint="glasses / lenses"
+            v-bind:error-messages="productsErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -137,21 +43,26 @@
             persistent-hint
             variant="solo"
           ></v-text-field>
-        </v-col> </v-row
-      ><v-btn color="white" class="mr-4"
-        ><router-link
+        </v-col>
+      </v-row>
+
+      <v-btn color="white" class="mr-4">
+        <router-link
           class="text-black"
           :to="{ name: `dashboard` }"
           color="white"
         >
           Cancel
-        </router-link></v-btn
-      ><v-btn @click="saveProduct" color="light-blue lighten-3">
+        </router-link>
+      </v-btn>
+
+      <v-btn @click="saveProduct" color="light-blue lighten-3">
         Create
       </v-btn>
     </v-container>
   </v-form>
 </template>
+
 <script>
 // import axios
 import axios from 'axios';
@@ -165,11 +76,27 @@ export default {
       founded: '',
       products: [],
       createdIn: '',
+      nameErrors: [],
+      productsErrors: [],
     };
   },
   methods: {
-    // Create New product
     async saveProduct() {
+      this.nameErrors = [];
+
+      this.productsErrors = [];
+
+      if (!this.name) {
+        this.nameErrors.push('Name is required');
+      }
+
+      if (this.products.length === 0) {
+        this.productsErrors.push('Products is required');
+      }
+      if (this.nameErrors.length || this.productsErrors.length) {
+        return;
+      }
+
       try {
         await axios.post('http://localhost:3000/api/v1/brands', {
           name: this.name,

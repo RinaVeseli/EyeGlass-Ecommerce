@@ -23,7 +23,8 @@ router
 router
   .route('/:id')
   .get(brandController.getBrand)
-  .patch(brandController.updateBrand)
-  .delete(brandController.deleteBrand);
+  .get(brandController.getBrandEyeglasses)
+  .patch(checkIfAdmin, brandController.updateBrand)
+  .delete(checkIfAdmin, brandController.deleteBrand);
 
 module.exports = router;

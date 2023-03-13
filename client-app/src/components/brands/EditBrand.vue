@@ -9,8 +9,10 @@
           <v-text-field
             v-model="name"
             label="Name"
+            required
             persistent-hint
             variant="solo"
+            v-bind:error-messages="nameErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -26,8 +28,10 @@
           <v-text-field
             v-model="products"
             label="Products"
+            required
             persistent-hint
             variant="solo"
+            v-bind:error-messages="productsErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -66,6 +70,8 @@ export default {
       products: [],
       createdIn: '',
       createdAt: '',
+      nameErrors: [],
+      productsErrors: [],
     };
   },
   created: function () {
@@ -91,6 +97,20 @@ export default {
 
     // Update product
     async updateProduct() {
+      this.nameErrors = [];
+
+      this.productsErrors = [];
+
+      if (!this.name) {
+        this.nameErrors.push('Name is required');
+      }
+
+      if (this.products.length === 0) {
+        this.productsErrors.push('Products is required');
+      }
+      if (this.nameErrors.length || this.productsErrors.length) {
+        return;
+      }
       try {
         await axios.patch(
           `http://localhost:3000/api/v1/brands/${this.$route.params._id}`,

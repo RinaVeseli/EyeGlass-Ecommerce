@@ -1,4 +1,5 @@
 const Brand = require('./../model/brandModel');
+const EyeGlass = require('./../model/eyeGlassesModel');
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -7,7 +8,33 @@ const AppError = require('./../utils/appError');
 //   req.query.sort= '-ratingAverage,price';
 //   req.query.field='name,price,ratingAverage,summary,difficulty';
 // };
+exports.getBrandEyeglasses = async (req, res, next) => {
+  try {
+    const brand = await Brand.find(req.params.id).populate(
+      'eyeglasses'
+    );
 
+    if (!brand) {
+      return res.status(404).json({
+        status: 'fail',
+        message: 'Brand not found',
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        eyeglasses: brand.eyeglasses,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: 'error',
+      message: 'Server error',
+    });
+  }
+};
 exports.getAllBrands = catchAsync(async (req, res, next) => {
   //Excecute Query
   const features = new APIFeatures(Brand.find(), req.query)

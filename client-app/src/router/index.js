@@ -65,7 +65,7 @@ const routes = [
   {
     path: '/contact-us',
     name: 'contact-us',
-    meta: { isAuthenticated: true },
+
     component: () =>
       import(
         /* webpackChunkName: "portfolio"  */ '../views/pages/Contact-us.vue'
@@ -87,7 +87,6 @@ const routes = [
       import(
         /* webpackChunkName: "create" */ '../components/Common/Header.vue'
       ),
-    meta: { isAdmin: true },
   },
   {
     path: `/edit/:_id`,
@@ -140,16 +139,16 @@ const routes = [
   {
     path: '/orders',
     name: 'orders',
-    component: () => 
-      import (
+    component: () =>
+      import(
         /* webpackChunkName: "ordersList" */ '../views/user/OrdersList.vue'
       ),
   },
   {
     path: '/wishlist',
     name: 'wishlist',
-    component: () => 
-      import (
+    component: () =>
+      import(
         /* webpackChunkName: "wishlist" */ '../views/user/Wishlist.vue'
       ),
   },
@@ -251,7 +250,6 @@ const routes = [
           import(
             /* webpackChunkName: "AddContacts" */ '../components/Dashboard/contacts/AddContacts.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `contacts/editContacts/:_id`,
@@ -276,7 +274,6 @@ const routes = [
           import(
             /* webpackChunkName: "CreateOrderStep" */ '../components/Dashboard/orderSteps/AddOrderSteps.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `orderSteps/editOrderStep/:_id`,
@@ -301,7 +298,6 @@ const routes = [
           import(
             /* webpackChunkName: "CreateFaq" */ '../components/Dashboard/Faqs/AddFaq.vue'
           ),
-        meta: { requiresAuth: true },
       },
       {
         path: `faqs/editFaqs/:_id`,
@@ -352,15 +348,15 @@ const routes = [
             /* webpackChunkName: "Users" */ '../components/users/UsersList.vue'
           ),
       },
-      {
-        path: '/:catchAll(.*)',
-        name: 'ErroPage',
-        component: () =>
-          import(
-            /* webpackChunkName: "Edit" */ '../views/pages/ErrorPage.vue'
-          ),
-      },
     ],
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'ErroPage',
+    component: () =>
+      import(
+        /* webpackChunkName: "Edit" */ '../views/pages/ErrorPage.vue'
+      ),
   },
 ];
 

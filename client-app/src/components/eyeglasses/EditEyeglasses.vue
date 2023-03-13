@@ -12,6 +12,7 @@
             label="Name"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="nameErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -20,15 +21,16 @@
             label="Color"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="colorErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
           <v-text-field
             v-model="frameSize"
             label="FrameSize"
-            hint="yyyy/mm/dd"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="sizeErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -37,6 +39,7 @@
             label="RatingsAverage"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="ratingErrors"
           ></v-text-field>
         </v-col>
         <!-- <v-col cols="12" sm="6">
@@ -54,6 +57,7 @@
             label="Price"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="priceErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -72,6 +76,7 @@
             label="Description"
             persistent-hint
             variant="solo"
+            v-bind:error-messages="descriptionErrors"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
@@ -120,6 +125,12 @@ export default {
       description: '',
       imageCover: null,
       images: null,
+      nameErrors: [],
+      colorErrors: [],
+      sizeErrors: [],
+      ratingErrors: [],
+      priceErrors: [],
+      descriptionErrors: [],
     };
   },
   created: function () {
@@ -149,6 +160,40 @@ export default {
 
     // Update product
     async updateProduct() {
+      this.nameErrors = [];
+      this.colorErrors = [];
+      this.sizeErrors = [];
+      this.ratingErrors = [];
+      this.priceErrors = [];
+      this.descriptionErrors = [];
+      if (!this.name) {
+        this.nameErrors.push('Name is required');
+      }
+      if (!this.color) {
+        this.colorErrors.push('Color is required');
+      }
+      if (!this.frameSize) {
+        this.sizeErrors.push('FrameSize is required');
+      }
+      if (!this.price) {
+        this.priceErrors.push('Price is required');
+      }
+      if (!this.ratingsAverage) {
+        this.ratingErrors.push('Rating is required');
+      }
+      if (!this.description) {
+        this.descriptionErrors.push('Description is required');
+      }
+      if (
+        this.nameErrors.length ||
+        this.colorErrors.length ||
+        this.sizeErrors.length ||
+        this.priceErrors.length ||
+        this.ratingErrors.length ||
+        this.descriptionErrors.length
+      ) {
+        return;
+      }
       try {
         const formData = new FormData();
         formData.append('imageCover', this.$refs.fileInput.files[0]);

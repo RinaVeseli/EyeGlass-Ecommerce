@@ -1,9 +1,6 @@
 <template>
   <router-view>
     <div class="flex-column">
-      <!-- <div class="mr-4">
-      <Sidebar />
-    </div> -->
       <div class="flex-column fill-height">
         <div class="d-flex style">
           <v-spacing><h1>Eyeglasses List</h1></v-spacing>
@@ -13,7 +10,7 @@
               :to="{ name: `CreateEye` }"
               color="white"
             >
-              Add New
+              Add News
             </router-link>
           </v-btn>
         </div>
@@ -31,6 +28,9 @@
               <th class="text-left">Price</th>
               <th class="text-left">PriceDiscount</th>
               <th class="text-left">Description</th>
+              <th class="text-left">Gender</th>
+              <th class="text-left">Shape</th>
+              <th class="text-left">Type</th>
               <th class="text-left"></th>
             </tr>
           </thead>
@@ -43,6 +43,9 @@
               <td>{{ item.price }}</td>
               <td>{{ item.priceDiscount }}</td>
               <td>{{ item.description }}</td>
+              <td>{{ item.gender }}</td>
+              <td>{{ item.shape }}</td>
+              <td>{{ item.type }}</td>
               <td>
                 <v-btn
                   variant="flat"
@@ -124,7 +127,7 @@ export default {
 <style>
 .table-container {
   float: right;
-  width: 85%; /* adjust as needed */
+  width: 85%;
 }
 .style {
   padding: 60px;

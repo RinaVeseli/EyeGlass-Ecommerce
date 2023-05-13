@@ -8,15 +8,13 @@ router
     contactsController.aliasTopContacts,
     contactsController.getLenses
   );
-router
-  .route('/')
-  .get(contactsController.getLenses)
-  .post(
-    contactsController.uploadContactsImages,
-    contactsController.resizeContactsImages,
-    checkIfAdmin,
-    contactsController.createLense
-  );
+router.route('/').get(contactsController.getLenses).post(
+  checkIfAdmin,
+  contactsController.uploadContactsImages,
+  contactsController.resizeContactsImages,
+
+  contactsController.createLense
+);
 
 router
   .route('/:id')

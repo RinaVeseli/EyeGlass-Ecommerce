@@ -29,7 +29,6 @@
   </v-form>
 </template>
 <script>
-// import axios
 import axios from 'axios';
 
 export default {
@@ -44,7 +43,6 @@ export default {
     this.getProductById();
   },
   methods: {
-    // Get Product By Id
     async getProductById() {
       this.shapeErrors = [];
       if (!this.shape) {
@@ -61,7 +59,6 @@ export default {
       }
     },
 
-    // Update product
     async updateProduct() {
       try {
         await axios.patch(

@@ -50,7 +50,7 @@
       <v-icon>mdi-account-outline</v-icon>
       <v-menu activator="parent" location="bottom right">
         <v-list>
-          <router-link to="dashboard">
+          <router-link to="/dashboard" v-if="isAdmin && signIn">
             <v-list-item>
               <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
@@ -85,11 +85,17 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { getAuth } from 'firebase/auth';
 import logo from '../../assets/303-3037502_2017-atlantic-eye-center-eye-optical-logo-removebg-preview.png';
 import axios from 'axios';
 export default {
   mounted() {
     this.setupFirebase();
+    this.checkIfAdmin();
+    window.addEventListener('resize', this.updateWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateWidth);
   },
   created() {
     axios
@@ -102,29 +108,40 @@ export default {
         console.error(error);
       });
   },
+
   methods: {
     setupFirebase() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           console.log(user);
-          // User is signed in.
           console.log('signed in');
           console.log(user.email);
           this.signIn = true;
         } else {
-          // No user is signed in.
           this.signIn = false;
           console.log('signed out', this.signIn);
         }
       });
+    },
+    updateWidth() {
+      this.screenWidth = window.innerWidth;
     },
     signOut() {
       firebase
         .auth()
         .signOut()
         .then(() => {
-          this.$router.replace({ path: 'login' });
+          this.$router.replace({ path: '/login' });
         });
+    },
+    async checkIfAdmin() {
+      try {
+        const tokenResult =
+          await getAuth().currentUser.getIdTokenResult();
+        this.isAdmin = tokenResult.claims.admin;
+      } catch (error) {
+        this.error = error;
+      }
     },
   },
   data: function () {
@@ -132,7 +149,9 @@ export default {
       signIn: false,
       logo: logo,
       cartLength: 0,
-
+      isAdmin: false,
+      isMenuOpen: false,
+      screenWidth: window.innerWidth,
       navigationItems: [
         { path: '/', name: 'HOME' },
         // { path: '/autoship', name: 'AUTOSHIP' },
@@ -146,10 +165,15 @@ export default {
       ],
     };
   },
+  computed: {
+    showMenu() {
+      return this.screenWidth <= 768;
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .v-toolbar__title {
   font-size: 2rem !important;
 }

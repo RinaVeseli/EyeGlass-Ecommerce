@@ -47,7 +47,6 @@
   </v-form>
 </template>
 <script>
-// import axios
 import axios from 'axios';
 
 export default {
@@ -66,7 +65,6 @@ export default {
     this.getProductById();
   },
   methods: {
-    // Get Product By Id
     async getProductById() {
       try {
         const response = await axios.get(
@@ -81,7 +79,6 @@ export default {
       }
     },
 
-    // Update product
     async updateProduct() {
       this.numberErrors = [];
 

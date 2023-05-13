@@ -5,14 +5,12 @@ const Eyeglasses = require('../model/eyeGlassesModel');
 
 const addToShoppingCart = async (req, res) => {
     try {
-      // Look up the product in the database
       const eyeglass = await Eyeglasses.findById(req.params.productId);
   
       if (!eyeglass) {
         return res.status(404).send('Product not found');
       }
   
-      // Create a new cart item for the current user
       const cartItem = new CartItem({
         user: req.user.id,
         eyeglasses: eyeglass._id,

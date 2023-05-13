@@ -1,6 +1,4 @@
 <template>
-  <router-view></router-view>
-
   <div class="product-card">
     <router-link
       :to="{
@@ -16,7 +14,7 @@
     /></router-link>
     <div class="info">
       <div class="nameFavo d-flex">
-        <h3>{{ brand }} | {{ data.name }}</h3>
+        <h3>{{ brands }} | {{ data.name }}</h3>
 
         <button @click="addToCart">
           <i class="fa-regular fa-heart"></i>
@@ -47,7 +45,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      brand: '',
+      brands: '',
     };
   },
   props: ['data'],
@@ -57,8 +55,8 @@ export default {
         const response = await axios.get(
           `http://localhost:3000/api/v1/brands/${brandId}`
         );
-        this.brand = response.data.data.brand.name;
-        console.log(this.brand);
+        this.brands = response.data.data.brand.name;
+        console.log(this.brands);
       } catch (err) {
         console.log(err);
       }
@@ -99,8 +97,7 @@ export default {
 }
 .product-card button {
   color: black;
-  /* border: none; */
-  /* padding: 5px 10px; */
+
   cursor: pointer;
 }
 .shopNow {

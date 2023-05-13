@@ -11,22 +11,22 @@
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
                   <v-card-title class="text-h5">
-                    <i class="fa-solid fa-users"></i> 5
+                    <i class="fa-solid fa-users"></i>
+                    {{ numberOfUsers }}
                   </v-card-title>
-
                   <v-card-subtitle>User</v-card-subtitle>
-
                   <v-card-actions>
                     <v-btn
                       class="ms-2"
                       variant="outlined"
                       size="small"
                     >
-                      See All Users
+                      <a href="/admin/dashboard/users">
+                        See All Users</a
+                      >
                     </v-btn>
                   </v-card-actions>
                 </div>
-
                 <v-avatar class="ma-3" size="125" rounded="0">
                   <v-img
                     src="https://icons.veryicon.com/png/o/miscellaneous/905-system/customer-management-4.png"
@@ -35,26 +35,28 @@
               </div>
             </v-card>
           </v-col>
-
           <v-col sm="5" md="4">
             <v-card color="#1F7087" theme="dark">
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
-                  <v-card-title class="text-h5"> 7 </v-card-title>
-
+                  <v-card-title class="text-h5">
+                    {{ numberOfContacts }}
+                  </v-card-title>
                   <v-card-subtitle>Contacts</v-card-subtitle>
-
                   <v-card-actions>
                     <v-btn
                       class="ms-2"
                       variant="outlined"
                       size="small"
                     >
-                      See All Contacts
+                      <a
+                        href="/admin/dashboard/contacts/contacts-list"
+                      >
+                        See All Contacts</a
+                      >
                     </v-btn>
                   </v-card-actions>
                 </div>
-
                 <v-avatar class="ma-3" size="125" rounded="0">
                   <v-img
                     src="https://cdn-icons-png.flaticon.com/512/2789/2789428.png"
@@ -63,28 +65,29 @@
               </div>
             </v-card>
           </v-col>
-
           <v-col sm="4" md="4">
             <v-card color="#952175" theme="dark">
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
                   <v-card-title class="text-h5">
-                    <i class="fa-solid fa-glasses"></i> 9
+                    <i class="fa-solid fa-glasses"></i>
+                    {{ numberOfEyeglasses }}
                   </v-card-title>
-
                   <v-card-subtitle>EyeGlasses</v-card-subtitle>
-
                   <v-card-actions>
                     <v-btn
                       class="ms-2"
                       variant="outlined"
                       size="small"
                     >
-                      See All EyeGlasses
+                      <a
+                        href="/admin/dashboard/eyeglasses/eyeglasses-list"
+                      >
+                        See All EyeGlasses</a
+                      >
                     </v-btn>
                   </v-card-actions>
                 </div>
-
                 <v-avatar class="ma-3" size="125" rounded="0">
                   <v-img
                     src="https://cdn-icons-png.flaticon.com/512/4312/4312129.png"
@@ -95,106 +98,96 @@
             </v-card>
           </v-col>
         </v-row>
+        <p class="allOrders">All Orders</p>
+        <div class="tableOrder">
+          <EasyDataTable :headers="headers" :items="items" />
+        </div>
       </v-container>
     </div>
   </div>
-  <!-- <div>
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      class="elevation-1"
-    >
-      <template v-slot:item.glutenfree="{ item }">
-        <v-simple-checkbox
-          v-model="item.glutenfree"
-          disabled
-        ></v-simple-checkbox>
-      </template>
-    </v-data-table>
-  </div> -->
 </template>
 <script>
 import Sidebar from './Sidebar.vue';
-export default {
+// import { mapGetters } from 'vuex';
+import { defineComponent } from 'vue';
+import EasyDataTable from 'vue3-easy-data-table';
+import axios from 'axios';
+export default defineComponent({
   name: 'recursive-menu',
+
+  components: {
+    Sidebar,
+    EasyDataTable,
+  },
   data() {
     return {
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%',
-          glutenfree: true,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%',
-          glutenfree: false,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%',
-          glutenfree: false,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%',
-          glutenfree: true,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%',
-          glutenfree: true,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%',
-          glutenfree: false,
-        },
-      ],
+      items: [],
+      cartItems: '',
+      eyeglass: '',
       headers: [
-        {
-          text: 'Dessert (100g serving)',
-          align: 'start',
-          sortable: false,
-          value: 'name',
-        },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Iron (%)', value: 'iron' },
-        { text: 'Gluten-Free', value: 'glutenfree' },
+        { text: 'User', value: 'user' },
+        { text: 'Products', value: 'eyeglass', sortable: true },
+        { text: 'TotalPrice', value: 'totalPrice', sortable: true },
       ],
     };
   },
-  components: {
-    Sidebar,
+  computed: {
+    numberOfEyeglasses() {
+      return this.$store.getters.numberOfEyeglasses;
+    },
+    numberOfContacts() {
+      return this.$store.getters.numberOfContacts;
+    },
+    numberOfUsers() {
+      return this.$store.getters.numberOfUsers;
+    },
   },
-};
+  created() {
+    this.$store.dispatch('fetchEyeglasses');
+    this.$store.dispatch('fetchContacts');
+    this.$store.dispatch('fetchUsers');
+    this.getProducts();
+  },
+  methods: {
+    async getProducts() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/order/all'
+        );
+        const items = response.data.data.data;
+        for (const item of items) {
+          const eyeglassNames = [];
+          for (const cartItemId of item.cartItems) {
+            const eyeglassName = await this.getEyeglassesName(
+              cartItemId
+            );
+            eyeglassNames.push(eyeglassName);
+          }
+          item.eyeglass = eyeglassNames.join(',');
+        }
+        this.items = items;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getEyeglassesName(brandId) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/v1/eyeGlasses/${brandId}`
+        );
+        const eyeglassName = response.data.data.data.name;
+
+        return eyeglassName;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async mounted() {
+      await this.getBrandName(this.data.eyeglass);
+    },
+  },
+});
 </script>
 <style>
 .con {
@@ -233,5 +226,17 @@ export default {
     order: 1;
     margin-top: 0;
   }
+}
+.v-btn a {
+  color: white;
+}
+.allOrders {
+  padding: 40px;
+  font-size: 40px;
+  font-weight: 500;
+  color: #4daaf2;
+}
+.tableOrder {
+  border: 1px solid #4daaf2;
 }
 </style>

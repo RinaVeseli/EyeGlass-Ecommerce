@@ -1,5 +1,9 @@
 <template>
   <Header />
+  <div v-if="isLoading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading...</span>
+  </div>
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
@@ -28,6 +32,7 @@
             :class="{ active: activeAccordion === filter.id }"
           >
             <label
+              class="filter"
               v-for="(option, index) in filter.options"
               :key="index"
             >
@@ -35,6 +40,7 @@
                 type="checkbox"
                 :value="option"
                 v-model="selectedFilters[filter.id]"
+                @change="getProducts"
               />
               {{ option }}
             </label>
@@ -45,11 +51,22 @@
     <section>
       <div class="topPhoto">
         <img
-          style="width: 100%"
-          src="https://www.royacdn.com/unsafe/Site-dcdb68ee-6669-451d-b1bf-d4df1374ba4e/contact_lenses_banner/contactsbanner_contact_lens_care_when_contacts_option.jpg"
+          style="
+            width: 100%;
+
+            box-shadow: 1px 6px 5px -3px rgba(150, 150, 150, 1);
+          "
+          :src="Contact_Lens_Banners_Alcon"
         />
       </div>
-
+      <div class="sorting">
+        <label for="brand">Sort by: </label>
+        <select v-model="sortOrder" id="brand" @change="getProducts">
+          <option value=""></option>
+          <option value="price">Price: Low to High</option>
+          <option value="-price">Price: High to Low</option>
+        </select>
+      </div>
       <div class="product-list">
         <ContactsCard
           v-for="data in items"
@@ -57,14 +74,6 @@
           :data="data"
           @add-to-cart="addToCart"
         ></ContactsCard>
-      </div>
-      <div class="cart">
-        <h2>Cart</h2>
-        <ul>
-          <li v-for="product in cartItems" :key="product.id">
-            {{ product.name }} - {{ product.price }}
-          </li>
-        </ul>
       </div>
     </section>
   </div>
@@ -75,6 +84,8 @@ import ContactsCard from '../../components/ContactsCard.vue';
 import axios from 'axios';
 import Footer from '../../components/Common/Footer.vue';
 import Header from '../../components/Common/Header.vue';
+import Contact_Lens_Banners_Alcon from '../../assets/Homepage/Contact_Lens_Banners_Alcon.jpg';
+
 export default {
   components: {
     ContactsCard,
@@ -85,22 +96,27 @@ export default {
     return {
       items: [],
       cartItems: [],
+      brands: [],
+      brandIds: {},
+      Contact_Lens_Banners_Alcon: Contact_Lens_Banners_Alcon,
+      isLoading: true,
       activeAccordion: null,
       filters: [
         {
           id: 'color',
           name: 'Color',
-          options: ['Black', 'Brown', 'Silver', 'Gold', 'Red'],
-        },
-        {
-          id: 'shape',
-          name: 'Shape',
           options: [
-            'Round',
-            'Rectangle',
-            'Square',
-            'Oval',
-            'Aviator',
+            'Beige',
+            'Black',
+            'Blue',
+            'Brown',
+            'Crystal',
+            'Gold',
+            'Grey',
+            'Red',
+            'Violet',
+            'Yellow',
+            'Multicolor',
           ],
         },
         {
@@ -109,33 +125,30 @@ export default {
           options: ['Litisha', 'KITS', 'Lauren', 'Rain Bain'],
         },
         {
-          id: 'gender',
-          name: 'Gender',
-          options: ['Men', 'Women', 'Unisex'],
+          id: 'type',
+          name: 'Type',
+          options: [
+            'Daily Disposables',
+            '1-2 Week Disposables',
+            'Monthly Disposables',
+            'Toric',
+            'Presbyopia',
+            'Extended Wear',
+          ],
         },
       ],
       selectedFilters: {
         color: [],
-        shape: [],
+
         brand: [],
-        gender: [],
+        type: [],
       },
     };
   },
-  computed: {
-    filteredGlasses() {
-      return this.glasses.filter((glasses) => {
-        return (
-          this.selectedFilters.color.includes(glasses.color) &&
-          this.selectedFilters.shape.includes(glasses.shape) &&
-          this.selectedFilters.brand.includes(glasses.brand) &&
-          this.selectedFilters.gender.includes(glasses.gender)
-        );
-      });
-    },
-  },
+
   created() {
     this.getProducts();
+    this.fetchBrands();
   },
   methods: {
     toggleAccordion(id) {
@@ -144,10 +157,36 @@ export default {
     addToCart(product) {
       this.cartItems.push(product);
     },
+    async fetchBrands() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/brands'
+        );
+        const brands = response.data.data.brands;
+
+        this.brands = brands.map((brand) => brand.name);
+
+        for (const brand of brands) {
+          this.brandIds[brand.name] = brand._id;
+          console.log(this.brandIds[brand.name]);
+        }
+        this.getProducts();
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async getProducts() {
       try {
         const response = await axios.get(
-          'http://localhost:3000/api/v1/contacts'
+          'http://localhost:3000/api/v1/contacts',
+          {
+            params: {
+              color: this.selectedFilters.color,
+              brand: this.brandIds[this.selectedFilters.brand],
+              type: this.selectedFilters.type,
+              sort: this.sortOrder,
+            },
+          }
         );
 
         this.items = response.data.data.data;
@@ -157,11 +196,56 @@ export default {
     },
   },
   mounted() {
-    this.getProducts();
+    setTimeout(() => {
+      this.isLoading = false;
+      this.$nextTick(() => {
+        this.$el.querySelector('.mainDiv').classList.add('loaded');
+      });
+    }, 500);
+    axios
+      .get('http://localhost:3000/api/v1/brands')
+      .then((response) => {
+        this.brands = response.data.data.brands.map(
+          (brand) => brand.name
+        );
+        console.log(this.brands);
+        const brandFilter = this.filters.find(
+          (f) => f.id === 'brand'
+        );
+        brandFilter.options = this.brands;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>
 <style>
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 2em;
+}
+.sorting {
+  text-align: end;
+  margin: 10px 20px 0px 0px;
+}
+#brand {
+  padding: 5px;
+  border: solid rgb(191, 191, 191) 1px;
+  border-radius: 5px;
+  box-shadow: 1px 9px 300px -5px rgba(191, 189, 191, 1);
+}
+.loading i {
+  margin-bottom: 1em;
+}
+
+.mainDiv.loaded {
+  opacity: 1;
+}
 .mainDiv {
   display: flex;
 }
@@ -208,12 +292,10 @@ export default {
 .accordion-body.active {
   display: block;
 }
-
-label {
+.filter {
   display: block;
   margin-bottom: 5px;
 }
-
 /* The glasseslist */
 .glasseslist {
   display: grid;

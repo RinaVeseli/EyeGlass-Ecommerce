@@ -3,16 +3,18 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   user: {
     type: String,
-    required: true
+    required: true,
   },
-  cartItems: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'EyeGlasses'
-  }],
+  cartItems: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'EyeGlasses',
+    },
+  ],
   totalPrice: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const Order = mongoose.model('Order', orderSchema);

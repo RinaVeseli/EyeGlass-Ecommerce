@@ -1,83 +1,91 @@
 <template>
   <Header />
-  <section class="aboutSection">
-    <img
-      v-for="item in items"
-      :key="item._id"
-      class="photo__about"
-      :src="'http://localhost:3000/img/about/' + item.file"
-      alt="About image"
-    />
-  </section>
-  <section class="aboutSection">
-    <div
-      id="shopify-section-about-us-content"
-      class="shopify-section about-us-content-sections"
-      v-for="item in items"
-      :key="item._id"
-    >
+  <div v-if="isLoading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading...</span>
+  </div>
+  <transition name="fade">
+    <section class="aboutSection">
+      <img
+        v-for="item in items"
+        :key="item._id"
+        class="photo__about"
+        :src="'http://localhost:3000/img/about/' + item.file"
+        alt="About image"
+      />
+    </section>
+  </transition>
+  <transition name="fade">
+    <section class="aboutSection">
       <div
-        class="about-us-content"
-        data-section-id="about-us-content"
-        data-section-type="about-us-content-section"
+        id="shopify-section-about-us-content"
+        class="shopify-section about-us-content-sections"
+        v-for="item in items"
+        :key="item._id"
       >
-        <div class="container">
-          <div class="col-left">
-            <h3 class="heading">ABOUT HIMALAYA OPTICAL</h3>
-            <div class="content">
-              {{ item.about }}
+        <div
+          class="about-us-content"
+          data-section-id="about-us-content"
+          data-section-type="about-us-content-section"
+        >
+          <div class="container">
+            <div class="col-left">
+              <h3 class="heading">ABOUT HIMALAYA OPTICAL</h3>
+              <div class="content">
+                {{ item.about }}
+              </div>
             </div>
-          </div>
-          <div class="col-right">
-            <h3 class="heading">THE TEAM OF HIMALAYA OPTICAL</h3>
-            <div class="content">
-              {{ item.team }}
+            <div class="col-right">
+              <h3 class="heading">THE TEAM OF HIMALAYA OPTICAL</h3>
+              <div class="content">
+                {{ item.team }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="about-us-content"
-        data-section-id="about-us-content"
-        data-section-type="about-us-content-section"
-      >
-        <div class="container">
-          <div class="col-left">
-            <h3 class="heading">OUR MISSION</h3>
-            <div class="content">
-              {{ item.mission }}
+        <div
+          class="about-us-content"
+          data-section-id="about-us-content"
+          data-section-type="about-us-content-section"
+        >
+          <div class="container">
+            <div class="col-left">
+              <h3 class="heading">OUR MISSION</h3>
+              <div class="content">
+                {{ item.mission }}
+              </div>
             </div>
-          </div>
-          <div class="col-right">
-            <h3 class="heading">OUR VISION</h3>
-            <div class="content">
-              {{ item.vision }}
+            <div class="col-right">
+              <h3 class="heading">OUR VISION</h3>
+              <div class="content">
+                {{ item.vision }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="about-us-content"
-        data-section-id="about-us-content"
-        data-section-type="about-us-content-section"
-      >
-        <div class="container">
-          <h3 class="heading">From The Director's Desk</h3>
-          <div class="content">
-            <p>
-              <b>"{{ item.quote }}"</b>
-            </p>
-            {{ item.directorDesk }}
+        <div
+          class="about-us-content"
+          data-section-id="about-us-content"
+          data-section-type="about-us-content-section"
+        >
+          <div class="container">
+            <h3 class="heading">From The Director's Desk</h3>
+            <div class="content">
+              <p>
+                <b>"{{ item.quote }}"</b>
+              </p>
+              {{ item.directorDesk }}
 
-            <p>
-              <br />
-              {{ item.contact }}
-            </p>
+              <p>
+                <br />
+                {{ item.contact }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </transition>
   <Footer />
 </template>
 <script>
@@ -92,6 +100,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       items: [],
     };
   },
@@ -115,6 +124,12 @@ export default {
     },
   },
   mounted() {
+    setTimeout(() => {
+      this.isLoading = false;
+      this.$nextTick(() => {
+        this.$el.querySelector('.mainDiv').classList.add('loaded');
+      });
+    }, 500);
     this.getProducts();
   },
 };
@@ -190,5 +205,14 @@ export default {
 }
 p {
   margin: 0 0 19.44444px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

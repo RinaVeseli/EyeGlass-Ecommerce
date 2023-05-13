@@ -16,13 +16,26 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field
+          <v-select
             v-model="color"
+            :items="[
+              'Beige',
+              'Black',
+              'Blue',
+              'Brown',
+              'Crystal',
+              'Gold',
+              'Grey',
+              'Red',
+              'Violet',
+              'Yellow',
+              'Multicolor',
+            ]"
             label="Color"
             persistent-hint
             variant="solo"
             v-bind:error-messages="colorErrors"
-          ></v-text-field>
+          ></v-select>
         </v-col>
       </v-row>
       <v-row>
@@ -45,22 +58,7 @@
           ></v-text-field>
         </v-col>
       </v-row>
-      <!-- <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="ratingsAverage"
-                label="RatingsAverage"
-                persistent-hint
-                variant="solo"
-              ></v-text-field>
-            </v-col> -->
-      <!-- <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="ratingsQuantity"
-                  label="RatingsQuantity"
-                  persistent-hint
-                  variant="solo"
-                ></v-text-field>
-              </v-col>  -->
+
       <v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -69,21 +67,56 @@
             persistent-hint
             variant="solo"
             v-bind:error-messages="descriptionErrors"
-          ></v-text-field> </v-col
-        ><v-col cols="12" sm="6">
-          <v-file-input
-            type="file"
-            ref="fileInput"
-            label="File input"
-            @submit.prevent="uploadFile"
-          ></v-file-input>
+          ></v-text-field>
         </v-col>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="type"
+            :items="[
+              'Daily Disposables',
+              '1-2 Week Disposables',
+              'Monthly Disposables',
+              'Toric',
+              'Presbyopia',
+              'Extended Wear',
+            ]"
+            label="Type of Contacts"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="colorErrors"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <label for="brand">Choose the brand: </label>
+          <select
+            v-model="brand"
+            id="brand"
+            class="v-col-sm-12 v-col-12"
+          >
+            <option
+              v-for="brand in brands"
+              :key="brand._id"
+              :value="brand._id"
+            >
+              {{ brand.name }}
+            </option>
+          </select>
+        </v-col>
+        <v-file-input
+          type="file"
+          ref="fileInput"
+          label="File input"
+          class="mt-8"
+          @submit.prevent="uploadFile"
+        ></v-file-input>
       </v-row>
 
       <v-file-input
         multiple
         ref="fileInput"
-        label="File input"
+        label="Files input"
         @submit.prevent="uploadFile"
       ></v-file-input>
       <v-btn color="white" class="mr-4"
@@ -111,8 +144,11 @@ export default {
       name: '',
       color: '',
       material: '',
+      type: '',
       price: '',
       description: '',
+      brand: '',
+      brands: [],
       imageCover: null,
       images: null,
       nameErrors: [],
@@ -121,6 +157,17 @@ export default {
       priceErrors: [],
       descriptionErrors: [],
     };
+  },
+  mounted() {
+    axios
+      .get('http://localhost:3000/api/v1/brands')
+      .then((response) => {
+        this.brands = response.data.data.brands;
+        console.log(this.brands);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
     // Create New product
@@ -159,14 +206,14 @@ export default {
         const formData = new FormData();
         formData.append('imageCover', this.$refs.fileInput.files[0]);
 
-        // Loop through all files in file input and append them to formData as 'images'
         for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
           formData.append('images', this.$refs.fileInput.files[i]);
         }
 
-        // Append other form data properties
         formData.append('name', this.name);
         formData.append('color', this.color);
+        formData.append('type', this.type);
+        formData.append('brand', this.brand);
         formData.append('material', this.material);
         formData.append('price', this.price);
         formData.append('description', this.description);
@@ -181,10 +228,10 @@ export default {
           }
         );
 
-        // Reset form data properties
         this.name = '';
         this.color = '';
         this.material = '';
+        this.type = '';
         this.price = '';
         this.description = '';
         this.imageCover = '';
@@ -206,7 +253,11 @@ export default {
 .title {
   margin-bottom: 20px;
 }
-
+#brand {
+  border: solid rgb(191, 191, 191) 1px;
+  border-radius: 5px;
+  box-shadow: 1px 9px 300px -5px rgba(191, 189, 191, 1);
+}
 .v-container {
   padding: 60px;
   width: 80%;

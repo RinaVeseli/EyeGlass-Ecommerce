@@ -43,13 +43,16 @@ const brandSchema = new mongoose.Schema(
     eyeglasses: [
       { type: mongoose.Schema.Types.ObjectId, ref: 'EyeGlasses' },
     ],
+    contacts: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Lenses' },
+    ],
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
-//DOCUMENT MIDDLEWARE: runs before .save() and .create()
+
 brandSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
@@ -62,14 +65,13 @@ brandSchema.pre(/^find/, function (next) {
   });
   next();
 });
-
-// brandSchema.pre('save', async function (next) {
-//   const eyeglassesPromises = this.eyeglasses.map(
-//     async (id) => await EyeGlasses.findById(id)
-//   );
-//   this.eyeglasses = await Promise.all(eyeglassesPromises);
-//   next();
-// });
+brandSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'contacts',
+    select: '-__v',
+  });
+  next();
+});
 
 const Brand = mongoose.model('Brand', brandSchema);
 

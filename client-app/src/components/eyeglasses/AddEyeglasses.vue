@@ -16,14 +16,28 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field
+          <v-select
             v-model="color"
+            :items="[
+              'Beige',
+              'Black',
+              'Blue',
+              'Brown',
+              'Crystal',
+              'Gold',
+              'Grey',
+              'Red',
+              'Violet',
+              'Yellow',
+              'Multicolor',
+            ]"
             label="Color"
             persistent-hint
             variant="solo"
             v-bind:error-messages="colorErrors"
-          ></v-text-field>
+          ></v-select>
         </v-col>
+
         <v-col cols="12" sm="6">
           <v-text-field
             v-model="frameSize"
@@ -41,15 +55,7 @@
             variant="solo"
             v-bind:error-messages="ratingErrors"
           ></v-text-field>
-        </v-col>
-        <!-- <v-col cols="12" sm="6">
-          <v-text-field
-            v-model="ratingsQuantity"
-            label="RatingsQuantity"
-            persistent-hint
-            variant="solo"
-          ></v-text-field>
-        </v-col>  --> </v-row
+        </v-col> </v-row
       ><v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -71,6 +77,34 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="6">
+          <v-select
+            v-model="shape"
+            :items="[
+              'Round',
+              'Rectangle',
+              'Square',
+              'Oval',
+              'Aviator',
+            ]"
+            label="Shape"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="typeErrors"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="type"
+            :items="['EYEGLASSES', 'SUNGLASSES']"
+            label="Type"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="typeErrors"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="description"
             label="Description"
@@ -80,9 +114,38 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
+          <v-select
+            v-model="gender"
+            :items="['Men', 'Women', 'Unisex']"
+            label="Gender"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="typeErrors"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <label for="brand">Choose the brand: </label>
+          <select
+            v-model="brand"
+            id="brand"
+            class="v-col-sm-12 v-col-12"
+          >
+            <option
+              v-for="brand in brands"
+              :key="brand._id"
+              :value="brand._id"
+            >
+              {{ brand.name }}
+            </option>
+          </select>
+        </v-col>
+        <v-col cols="12" sm="6">
           <v-file-input
             type="file"
             ref="fileInput"
+            class="mt-5"
             @submit.prevent="uploadFile"
           ></v-file-input>
         </v-col>
@@ -108,7 +171,6 @@
   </v-form>
 </template>
 <script>
-// import axios
 import axios from 'axios';
 
 export default {
@@ -122,6 +184,11 @@ export default {
       price: '',
       priceDiscount: '',
       description: '',
+      type: '',
+      shape: '',
+      brand: '',
+      gender: '',
+      brands: [],
       imageCover: null,
       images: null,
       nameErrors: [],
@@ -132,9 +199,23 @@ export default {
       descriptionErrors: [],
     };
   },
+  mounted() {
+    axios
+      .get('http://localhost:3000/api/v1/brands')
+      .then((response) => {
+        this.brands = response.data.data.brands;
+        console.log(this.brands);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   methods: {
-    // Create New product
     async saveProduct() {
+      if (!this.brand) {
+        alert('Please select a brand');
+        return;
+      }
       this.nameErrors = [];
       this.colorErrors = [];
       this.sizeErrors = [];
@@ -173,15 +254,17 @@ export default {
         const formData = new FormData();
         formData.append('imageCover', this.$refs.fileInput.files[0]);
 
-        // Loop through all files in file input and append them to formData as 'images'
         for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
           formData.append('images', this.$refs.fileInput.files[i]);
         }
 
-        // Append other form data properties
         formData.append('name', this.name);
         formData.append('color', this.color);
         formData.append('frameSize', this.frameSize);
+        formData.append('type', this.type);
+        formData.append('gender', this.gender);
+        formData.append('shape', this.shape);
+        formData.append('brand', this.brand);
         formData.append('ratingsAverage', this.ratingsAverage);
         formData.append('price', this.price);
         formData.append('priceDiscount', this.priceDiscount);
@@ -197,12 +280,13 @@ export default {
           }
         );
 
-        // Reset form data properties
         this.name = '';
         this.color = '';
         this.frameSize = '';
         this.ratingsAverage = '';
         this.price = '';
+        this.shape = '';
+        this.gender = '';
         this.priceDiscount = '';
         this.description = '';
         this.imageCover = '';
@@ -232,5 +316,10 @@ export default {
   width: 80%;
   float: center;
   justify-content: space-between;
+}
+#brand {
+  border: solid rgb(191, 191, 191) 1px;
+  border-radius: 5px;
+  box-shadow: 1px 9px 300px -5px rgba(191, 189, 191, 1);
 }
 </style>

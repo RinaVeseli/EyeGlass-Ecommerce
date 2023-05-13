@@ -16,14 +16,28 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field
+          <v-select
             v-model="color"
+            :items="[
+              'Beige',
+              'Black',
+              'Blue',
+              'Brown',
+              'Crystal',
+              'Gold',
+              'Grey',
+              'Red',
+              'Violet',
+              'Yellow',
+              'Multicolor',
+            ]"
             label="Color"
             persistent-hint
             variant="solo"
             v-bind:error-messages="colorErrors"
-          ></v-text-field>
+          ></v-select>
         </v-col>
+
         <v-col cols="12" sm="6">
           <v-text-field
             v-model="frameSize"
@@ -41,15 +55,7 @@
             variant="solo"
             v-bind:error-messages="ratingErrors"
           ></v-text-field>
-        </v-col>
-        <!-- <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="ratingsQuantity"
-              label="RatingsQuantity"
-              persistent-hint
-              variant="solo"
-            ></v-text-field>
-          </v-col>  --> </v-row
+        </v-col> </v-row
       ><v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -71,6 +77,34 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="6">
+          <v-select
+            v-model="shape"
+            :items="[
+              'Round',
+              'Rectangle',
+              'Square',
+              'Oval',
+              'Aviator',
+            ]"
+            label="Shape"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="typeErrors"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="type"
+            :items="['EYEGLASSES', 'SUNGLASSES']"
+            label="Type"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="typeErrors"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="6">
           <v-text-field
             v-model="description"
             label="Description"
@@ -80,9 +114,38 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
+          <v-select
+            v-model="gender"
+            :items="['Men', 'Women', 'Unisex']"
+            label="Gender"
+            persistent-hint
+            variant="solo"
+            v-bind:error-messages="typeErrors"
+          ></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="6">
+          <label for="brand">Choose the brand: </label>
+          <select
+            v-model="brand"
+            id="brand"
+            class="v-col-sm-12 v-col-12"
+          >
+            <option
+              v-for="brand in brands"
+              :key="brand._id"
+              :value="brand._id"
+            >
+              {{ brand.name }}
+            </option>
+          </select>
+        </v-col>
+        <v-col cols="12" sm="6">
           <v-file-input
             type="file"
             ref="fileInput"
+            class="mt-5"
             @submit.prevent="uploadFile"
           ></v-file-input>
         </v-col>
@@ -108,7 +171,6 @@
   </v-form>
 </template>
 <script>
-// import axios
 import axios from 'axios';
 
 export default {
@@ -119,10 +181,14 @@ export default {
       color: '',
       frameSize: '',
       ratingsAverage: '',
-      //   ratingsQuantity: '',
       price: '',
       priceDiscount: '',
       description: '',
+      type: '',
+      shape: '',
+      brand: '',
+      gender: '',
+      brands: [],
       imageCover: null,
       images: null,
       nameErrors: [],
@@ -133,11 +199,21 @@ export default {
       descriptionErrors: [],
     };
   },
+  mounted() {
+    axios
+      .get('http://localhost:3000/api/v1/brands')
+      .then((response) => {
+        this.brands = response.data.data.brands;
+        console.log(this.brands);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   created: function () {
     this.getProductById();
   },
   methods: {
-    // Get Product By Id
     async getProductById() {
       try {
         const response = await axios.get(
@@ -149,6 +225,10 @@ export default {
         this.frameSize = response.data.data.data.frameSize;
         this.ratingsAverage = response.data.data.data.ratingsAverage;
         this.price = response.data.data.data.price;
+        this.type = response.data.data.data.type;
+        this.shape = response.data.data.data.shape;
+        this.brand = response.data.data.data.brand;
+        this.gender = response.data.data.data.gender;
         this.priceDiscount = response.data.data.data.priceDiscount;
         this.description = response.data.data.data.description;
         this.imageCover = response.data.data.data.imageCover[0];
@@ -158,7 +238,6 @@ export default {
       }
     },
 
-    // Update product
     async updateProduct() {
       this.nameErrors = [];
       this.colorErrors = [];
@@ -198,13 +277,16 @@ export default {
         const formData = new FormData();
         formData.append('imageCover', this.$refs.fileInput.files[0]);
 
-        // Loop through all files in file input and append them to formData as 'images'
         for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
           formData.append('images', this.$refs.fileInput.files[i]);
         }
         formData.append('name', this.name);
         formData.append('color', this.color);
         formData.append('frameSize', this.frameSize);
+        formData.append('type', this.type);
+        formData.append('gender', this.gender);
+        formData.append('shape', this.shape);
+        formData.append('brand', this.brand);
         formData.append('ratingsAverage', this.ratingsAverage);
         formData.append('price', this.price);
         formData.append('priceDiscount', this.priceDiscount);
@@ -221,6 +303,8 @@ export default {
             frameSize: this.frameSize,
             ratingsAverage: this.ratingsAverage,
             price: this.price,
+            shape: this.shape,
+            gender: this.gender,
             priceDiscount: this.priceDiscount,
             description: this.description,
             imageCover: this.imageCover,
@@ -231,6 +315,8 @@ export default {
         this.name = '';
         this.color = '';
         this.frameSize = '';
+        this.shape = '';
+        this.gender = '';
         this.ratingsAverage = '';
         this.price = '';
         this.priceDiscount = '';

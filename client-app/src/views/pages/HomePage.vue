@@ -1,5 +1,33 @@
 <template>
   <Header />
+  <v-dialog v-model="show" max-width="400">
+    <v-card>
+      <v-card-title class="headline">Add Review</v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="submitReview">
+          <v-text-field label="Name" v-model="name"></v-text-field>
+          <v-textarea label="Review" v-model="review"></v-textarea>
+          <v-rating
+            v-model="rating"
+            color="blue"
+            active-color="orange-lighten-1"
+            half-increments
+            hover
+          ></v-rating>
+          <v-btn
+            type="submit"
+            color="#0D47A1"
+            style="color: aliceblue"
+            >Submit</v-btn
+          >
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <div v-if="isLoading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading...</span>
+  </div>
   <section class="hero">
     <div class="newhero">
       <div class="heroes">
@@ -24,9 +52,7 @@
         </router-link>
       </div>
       <div class="part1photo d-none">
-        <img
-          src="https://www.opticontacts.com/cart/images/shared/homepage/legacy/cexpress_contacts.png"
-        />
+        <img :src="cexpress_contacts" />
       </div>
     </div>
   </section>
@@ -84,9 +110,7 @@
           src="https://png.pngtree.com/png-vector/20191121/ourmid/pngtree-shield-with-a-check-mark-safe-and-protect-logo-on-white-png-image_1870454.jpg"
         />
       </div>
-      <!-- <img
-          src="https://www.iconbunny.com/icons/media/catalog/product/2/3/2315.8-left-back-arrow-icon-iconbunny.jpg"
-        /> -->
+    
     </div>
   </section>
 
@@ -172,7 +196,6 @@
   <section>
     <div class="container">
       <section class="section mb-6">
-        <!-- WIDGET: HalfWidthContent, widgetID:  4099276460824401267, widgetSuffix: _5_-5006_4099276460824401267 --><!-- Espot name: Widget_HalfWidthWidget_TO_4099276460824401267 -->
         <h2
           id="title_5_-5006_4099276460824401267"
           class="section__title"
@@ -199,7 +222,7 @@
                 arialabel="new-arrivals"
                 data-element-id="X_HP_Zone3_NewArrivals"
                 data-description="NewArrivals"
-                href="/to-us/new-arrivals"
+                href="/glasses"
                 aria-label="new arrival"
                 class="d-block keyboardAccessible"
               >
@@ -242,7 +265,7 @@
                 aria-label="best-sellers"
                 data-element-id="X_HP_Zone3_BestSellers"
                 data-description="BestSellers"
-                href="/to-us/best-sellers"
+                href="/glasses"
                 class="d-block keyboardAccessible"
               >
                 <div class="feature__body text-center">
@@ -296,7 +319,7 @@
             </p>
             <div class="homepage__autohsip--ctas d-none d-sm-inline">
               <a
-                href="/contacts"
+                href="/glasses"
                 class="btn homepage__anchor"
                 role="button"
                 >Shop now</a
@@ -407,13 +430,70 @@ import FAQVIEW from '../../components/FAQView.vue';
 import OrderIn3Step from '../../components/OrderIn3Steps.vue';
 import Footer from '../../components/Common/Footer.vue';
 import Header from '../../components/Common/Header.vue';
+import cexpress_contacts from '../../assets/Homepage/cexpress_contacts.png';
+import axios from 'axios';
 export default {
   name: 'HomePage',
   components: { FAQVIEW, OrderIn3Step, Header, Footer },
+  data: function () {
+    return {
+      name: '',
+      review: '',
+      rating: 0,
+      show: this.showModal,
+      isLoading: true,
+      cexpress_contacts: cexpress_contacts,
+    };
+  },
+  props: {
+    showModal: Boolean,
+  },
+  methods: {
+    async submitReview() {
+      try {
+        await axios
+          .post('http://localhost:3000/api/v1/review', {
+            name: this.name,
+            review: this.review,
+            rating: this.rating,
+          })
+          .then((res) => {
+            console.log(res);
+            this.show = false;
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  mounted() {
+    setTimeout(() => {
+      this.isLoading = false;
+      this.$nextTick(() => {
+        this.$el.querySelector('.mainDiv').classList.add('loaded');
+      });
+    }, 200);
+  },
 };
 </script>
 
 <style lang="css" scoped>
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 2em;
+}
+
+.loading i {
+  margin-bottom: 1em;
+}
+
+.mainDiv.loaded {
+  opacity: 1;
+}
 .hero {
   color: black;
   display: flex;

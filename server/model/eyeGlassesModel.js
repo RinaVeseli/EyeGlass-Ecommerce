@@ -15,10 +15,12 @@ const eyeGlassesSchema = new mongoose.Schema({
       40,
       'An EyeGlass name must have more or equal then 40 characters',
     ],
-    // validate: [
-    //   validator.isAlpha,
-    //   'EyeGlass name must only contain characters',
-    // ],
+  },
+  type: {
+    type: String,
+    // required: [true, 'A glasses must have a type'],
+    // enum: ['Eyeglasses', 'Sunglasses'],
+    // default: 'Eyeglasses',
   },
   color: {
     type: String,
@@ -34,12 +36,29 @@ const eyeGlassesSchema = new mongoose.Schema({
     type: Number,
     default: 4.5,
   },
+  gender: {
+    type: String,
+    // enum: ['Men', 'Women', 'Unisex'],
+    // default: 'Unisex',
+  },
+  shape: {
+    type: String,
+    enum: {
+      values: ['Round', 'Rectangle', 'Square', 'Oval', 'Aviator'],
+      message:
+        'Product is either: round, rectangle, square, oval, aviator',
+    },
+  },
   ratingsQuantity: {
     type: Number,
     default: 0,
   },
   price: {
     type: Number,
+    required: [true, 'An eyeglass must have a price'],
+  },
+  description: {
+    type: String,
     required: [true, 'An eyeglass must have a price'],
   },
   priceDiscount: {
@@ -59,7 +78,6 @@ const eyeGlassesSchema = new mongoose.Schema({
   },
   imageCover: {
     type: String,
-    // required: [true, 'An eyeglass must have an image'],
   },
   images: [String],
   createdAt: {

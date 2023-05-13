@@ -5,10 +5,13 @@
       <v-avatar class="my-4" size="40">
         <v-img
           src="http://cdn.onlinewebfonts.com/svg/img_569204.png"
-          class="image"
         ></v-img>
       </v-avatar>
-      <h3 v-if="currentUser" class="my-4 m-3 black--text" size="40">
+      <h3
+        v-if="currentUser && smallMenu == false"
+        class="my-4 m-3 black--text"
+        size="40"
+      >
         Hello {{ currentUser.email }}
       </h3>
     </div>
@@ -127,7 +130,7 @@ export default {
             ],
           },
           {
-            label: 'Eyeglasses',
+            label: 'Glasses',
             children: [
               {
                 label: 'Details',
@@ -139,26 +142,16 @@ export default {
               },
             ],
           },
-
-          {
-            label: 'Sunglasses',
-            children: [
-              {
-                label: 'Details',
-                path: '/admin/products/shapes/details',
-              },
-              {
-                label: 'Create',
-                path: '/admin/products/shapes/create',
-              },
-            ],
-          },
         ],
       },
       {
         label: 'Common',
         icon: faComputerMouse,
         children: [
+          {
+            label: 'Reviews',
+            path: '/admin/dashboard/reviews',
+          },
           {
             label: 'Brand',
 
@@ -192,7 +185,16 @@ export default {
       {
         label: 'Users',
         icon: faUser,
-        path: '/admin/dashboard/users',
+        children: [
+          {
+            label: 'All Users',
+            path: '/admin/dashboard/users',
+          },
+          // {
+          //   label: 'All Orders',
+          //   path: '/admin/dashboard/allorders',
+          // },
+        ],
       },
 
       {

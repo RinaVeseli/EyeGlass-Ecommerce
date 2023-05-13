@@ -1,5 +1,5 @@
-const admin = require("../services/firebase");
-const registerUserSchema = require("../validator/userValidation/registerUserSchema");
+const admin = require('../services/firebase');
+const registerUserSchema = require('../validator/userValidation/registerUserSchema');
 
 const db = admin.firestore();
 
@@ -8,10 +8,10 @@ const userController = {
     const validationResult = registerUserSchema.validate(req.body);
 
     if (validationResult.error) {
-      return res.status(400).json({error: validationResult.error});
+      return res.status(400).json({ error: validationResult.error });
     }
 
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     try {
       const user = await admin.auth().createUser({
@@ -19,19 +19,21 @@ const userController = {
         password,
       });
 
-      if (user.email.includes("ubt-uni.net")) {
-        const costumClaims = {admin: true};
-        await admin.auth().setCustomUserClaims(user.uid, costumClaims);
+      if (user.email.includes('ubt-uni.net')) {
+        const costumClaims = { admin: true };
+        await admin
+          .auth()
+          .setCustomUserClaims(user.uid, costumClaims);
 
-        await db.collection("users").doc(user.uid).set({
+        await db.collection('users').doc(user.uid).set({
           email: user.email,
           role: costumClaims,
         });
       }
       return res.json(user);
     } catch (err) {
-        console.log(err);
-        return res.status(500).json();
+      console.log(err);
+      return res.status(500).json();
     }
   },
   listAllUsers: async (req, res) => {
@@ -44,27 +46,24 @@ const userController = {
       return res.status(500).json();
     }
   },
-  deleteUser: async(req, res) => {
+
+  deleteUser: async (req, res) => {
     const uid = req.params.id;
 
-    admin.auth().deleteUser(uid)
-    .then(() => {
-      res.status(204).json();
-    })
-    .catch(error => {
-      console.error('Error deleting user:', error);
-      res.status(500).json('Error deleting user');
-    });
-  }
+    admin
+      .auth()
+      .deleteUser(uid)
+      .then(() => {
+        res.status(204).json();
+      })
+      .catch((error) => {
+        console.error('Error deleting user:', error);
+        res.status(500).json('Error deleting user');
+      });
+  },
 };
 
-
-
-
 module.exports = userController;
-
-
-
 
 // const { auth, db } = require('../services/firebase');
 // const bcrypt = require('bcryptjs');

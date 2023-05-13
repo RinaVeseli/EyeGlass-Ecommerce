@@ -5,7 +5,7 @@ const checkIfAdmin = async (req, res, next) => {
   try {
     const user = await admin.auth().verifyIdToken(authToken);
     if (user.admin) {
-      const userId = userInfo.uid;
+      const userId = user.uid;
       req.user = { id: userId };
       req.authId = user.uid;
     } else {

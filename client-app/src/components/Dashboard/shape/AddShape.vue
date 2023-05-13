@@ -30,7 +30,6 @@
   </v-form>
 </template>
 <script>
-// import axios
 import axios from 'axios';
 
 export default {
@@ -42,7 +41,6 @@ export default {
     };
   },
   methods: {
-    // Create New product
     async saveProduct() {
       this.shapeErrors = [];
       if (!this.shape) {

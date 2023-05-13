@@ -102,16 +102,6 @@ export default {
         console.log(err);
       }
     },
-    // pressed() {
-    //   firebase
-    //     .auth()
-    //     .createUserWithEmailAndPassword(this.email, this.password)
-    //     .then(() => {
-    //       console.log('here');
-    //       this.$router.replace({ path: '/' });
-    //     })
-    //     .catch((error) => (this.error = error));
-    // },
   },
 };
 </script>

@@ -1,9 +1,17 @@
 const express = require('express');
 const reviewController = require('../controllers/reviewController');
+const checkIfAuthenticated = require('../middleware/checkIfAuthenticated');
+const reviewRouter = express.Router();
 
-const router = express.Router();
+reviewRouter.post(
+  '/',
+  checkIfAuthenticated,
+  reviewController.addReview
+);
+reviewRouter.get(
+  '/',
+  checkIfAuthenticated,
+  reviewController.getReviews
+);
 
-router.route('/').get(reviewController.getAllReviews);
-// .post(reviewController.createReview);
-
-module.exports = router;
+module.exports = reviewRouter;

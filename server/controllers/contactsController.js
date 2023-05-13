@@ -5,7 +5,7 @@ const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
 const multer = require('multer');
 const sharp = require('sharp');
-
+const Brand = require('./../model/brandModel');
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -50,7 +50,6 @@ exports.resizeContactsImages = catchAsync(async (req, res, next) => {
 
   // 1) Cover image
   await sharp(req.files.imageCover[0].buffer)
-    .resize(1000, 650)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`public/img/contacts/${imageCoverFilename}`);
@@ -74,6 +73,38 @@ exports.resizeContactsImages = catchAsync(async (req, res, next) => {
 
 exports.getLenses = factory.getAll(Lenses);
 exports.getLense = factory.getOne(Lenses);
-exports.createLense = factory.createOne(Lenses);
+exports.createLense = async (req, res) => {
+  try {
+    const brand = await Brand.findById(req.body.brand);
+    if (!brand) {
+      return res.status(400).json({ error: 'Brand not found' });
+    }
+    const lenses = await Lenses.create({
+      name: req.body.name,
+      color: req.body.color,
+      type: req.body.type,
+      price: req.body.price,
+      brand: req.body.brand,
+      description: req.body.description,
+      material: req.body.material,
+      type: req.body.type,
+      imageCover: req.body.imageCover,
+      images: req.body.images,
+    });
+
+    brand.contacts.push(lenses);
+    await brand.save();
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        lenses,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 exports.updateLense = factory.updateOne(Lenses);
 exports.deleteLense = factory.deleteOne(Lenses);

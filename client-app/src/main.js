@@ -9,7 +9,10 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import axios from 'axios';
-
+import store from './store';
+import Vuex from 'vuex';
+import Vue3EasyDataTable from 'vue3-easy-data-table';
+import 'vue3-easy-data-table/dist/style.css';
 loadFonts();
 const firebaseConfig = {
   apiKey: 'AIzaSyAcR6-Zm_oj-3mOXKxEbsJnaCIVndVNIkk',
@@ -22,6 +25,25 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 let app;
+
+// axios.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   (error) => {
+//     if (error.response.status === 401) {
+//       // Show error message
+//       createToast('Please Login', {
+//         position: 'bottom-right',
+//         type: 'info',
+//         toastBackgroundColor: '#0071BC',
+//         transition: 'slide',
+//       });
+//       console.error('Unauthorized access');
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 firebase.auth().onAuthStateChanged((user) => {
   console.log(user);
@@ -38,7 +60,9 @@ firebase.auth().onAuthStateChanged((user) => {
       .use(router)
       .use(vuetify)
       .use(firebase)
-
+      .use(Vuex)
+      .use(store)
       .mount('#app');
+    app.component('EasyDataTable', Vue3EasyDataTable);
   }
 });

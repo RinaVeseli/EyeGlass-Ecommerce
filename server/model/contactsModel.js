@@ -16,7 +16,11 @@ const contactSchema = new mongoose.Schema({
       'Must have a name more or equal then 2 characters',
     ],
   },
-
+  type: {
+    type: String,
+    required: [true, 'Contacts must have a type'],
+    trim: true,
+  },
   color: {
     type: String,
     required: [true, 'Contacts must have color'],
@@ -38,6 +42,11 @@ const contactSchema = new mongoose.Schema({
       'Must have a description more or equal then 3 characters',
     ],
   },
+  brand: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Brand',
+    required: [true, 'Contacts must have a brand'],
+  },
   imageCover: {
     type: String,
     // required: [true, 'An eyeglass must have an image'],
@@ -53,5 +62,13 @@ const contactSchema = new mongoose.Schema({
 });
 
 const Lenses = mongoose.model('Lenses', contactSchema);
-
+Lenses.find()
+  .populate('brand')
+  .exec((err, lenses) => {
+    if (err) {
+      console.error(err);
+    } else {
+      return lenses;
+    }
+  });
 module.exports = Lenses;

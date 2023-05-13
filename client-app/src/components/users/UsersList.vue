@@ -1,23 +1,11 @@
 <template>
   <router-view>
     <div class="flex-column">
-      <!-- <div class="mr-4">
-        <Sidebar />
-      </div> -->
       <div class="flex-column fill-height">
         <div class="d-flex style">
           <v-spacing>
             <h1>Users List</h1>
           </v-spacing>
-          <v-btn variant="outlined" color="green" class="mr-4">
-            <router-link
-              class="text-black"
-              to="/register"
-              color="white"
-            >
-              Add New
-            </router-link>
-          </v-btn>
         </div>
         <v-table
           fixed-header
@@ -99,7 +87,6 @@ export default {
 .table-container {
   float: right;
   width: 55%;
-  /* adjust as needed */
   margin-right: 15%;
 }
 

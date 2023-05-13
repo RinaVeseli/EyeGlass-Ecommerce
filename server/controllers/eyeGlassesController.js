@@ -43,22 +43,18 @@ exports.resizeEyeglassesImages = catchAsync(
       return next();
     }
 
-    // Generate unique filenames for the uploaded images
     const imageCoverFilename = `eyeglasses-${Date.now()}-cover.jpeg`;
     const imageFilenames = req.files.images.map(
       (file, i) => `eyeglasses-${Date.now()}-${i + 1}.jpeg`
     );
 
-    // 1) Cover image
     await sharp(req.files.imageCover[0].buffer)
-      .resize(2000, 1333)
       .toFormat('jpeg')
       .jpeg({ quality: 90 })
       .toFile(`public/img/eyeglasses/${imageCoverFilename}`);
 
     req.body.imageCover = imageCoverFilename;
 
-    // 2) Images
     await Promise.all(
       req.files.images.map(async (file, i) => {
         await sharp(file.buffer)
@@ -78,24 +74,26 @@ exports.getAllEyeGlasses = factory.getAll(EyeGlasses);
 exports.getEyeGlass = factory.getOne(EyeGlasses, { path: 'reviews' });
 exports.createEyeglass = async (req, res) => {
   try {
-    // Check if the brand exists
-    const brand = await Brand.findById(req.body.brandId);
+    const brand = await Brand.findById(req.body.brand);
     if (!brand) {
       return res.status(400).json({ error: 'Brand not found' });
     }
-
-    // Create the new eyeglass
     const eyeglass = await EyeGlasses.create({
       name: req.body.name,
       color: req.body.color,
       frameSize: req.body.frameSize,
       price: req.body.price,
-      brand: req.body.brandId,
+      brand: req.body.brand,
+      description: req.body.description,
+      gender: req.body.gender,
+      shape: req.body.shape,
+      type: req.body.type,
       imageCover: req.body.imageCover,
+      ratingsAverage: req.body.ratingsAverage,
+      priceDiscount: req.body.priceDiscount,
       images: req.body.images,
     });
 
-    // Add the eyeglass to the brand's list of eyeglasses
     brand.eyeglasses.push(eyeglass);
     await brand.save();
 

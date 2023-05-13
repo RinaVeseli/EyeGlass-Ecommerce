@@ -29,6 +29,7 @@
     "jquery": "^3.6.4",
     "jwt-decode": "^3.1.2",
     "mdbvue": "^6.7.3",
+    "mosha-vue-toastify": "^1.0.23",
     "nodemailer": "^6.9.1",
     "popper.js": "^1.16.1",
     "roboto-fontface": "*",
@@ -37,6 +38,7 @@
     "vue-dropdowns": "^1.1.2",
     "vue-navigation-bar": "^5.0.2",
     "vue-router": "^4.0.13",
+    "vue3-easy-data-table": "^1.5.38",
     "vuetify": "^3.1.8",
     "vuex": "^4.0.2",
     "webfontloader": "^1.0.0"

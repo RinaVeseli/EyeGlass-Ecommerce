@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="productDescr">
-      <h1>Product Information</h1>
+      <h1>Product Description</h1>
 
       <div class="descBox">
         <div class="imgFrame">
@@ -111,7 +111,7 @@ export default {
       imageCover: null,
       images: [],
 
-      slides: ['First', 'Second', 'Third', 'Fourth'],
+      slides: ['First', 'Second'],
     };
   },
   created: function () {
@@ -179,7 +179,7 @@ export default {
 }
 .img img {
   width: 900px;
-  height: auto;
+  height: 450px;
   object-fit: cover;
   border-radius: 40px;
 }

@@ -4,12 +4,21 @@
     <div class="maindetails">
       <div class="img">
         <v-card max-width="944" height="500" class="mx-auto">
-          <v-carousel :continuous="true" :show-arrows="true" hide-delimiter-background delimiter-icon="mdi-circle"
-            height="460">
+          <v-carousel
+            :continuous="true"
+            :show-arrows="true"
+            hide-delimiter-background
+            delimiter-icon="mdi-circle"
+            height="460"
+          >
             <v-carousel-item v-for="(slide, i) in slides" :key="i">
-              <img :src="
-                'http://localhost:3000/img/eyeglasses/' + images[i]
-              " height="100%" tile />
+              <img
+                :src="
+                  'http://localhost:3000/img/eyeglasses/' + images[i]
+                "
+                height="100%"
+                tile
+              />
             </v-carousel-item>
           </v-carousel>
         </v-card>
@@ -20,8 +29,18 @@
             <h1>{{ name }}</h1>
             <h2>Rating: {{ ratingsAverage }}</h2>
           </div>
-          <v-btn @click="addEyeglassToWishlistOrDeleteEyeglassFromWishlist($route.params._id)" icon class="mx-1">
-            <v-icon v-if="wishlistButton === false">mdi-heart-outline</v-icon>
+          <v-btn
+            @click="
+              addEyeglassToWishlistOrDeleteEyeglassFromWishlist(
+                $route.params._id
+              )
+            "
+            icon
+            class="mx-1"
+          >
+            <v-icon v-if="wishlistButton === false"
+              >mdi-heart-outline</v-icon
+            >
             <v-icon v-else>mdi-heart</v-icon>
           </v-btn>
         </div>
@@ -47,10 +66,14 @@
         </div>
         <div class="size">
           <h1>
-            Size : <b>{{ size }}</b>
+            Size : <b>{{ frameSize }}</b>
           </h1>
         </div>
-        <button @click="addToCart($route.params._id)" :disabled="isInCart" class="addtocart">
+        <button
+          @click="addToCart($route.params._id)"
+          :disabled="isInCart"
+          class="addtocart"
+        >
           <p>{{ cartText }}</p>
         </button>
       </div>
@@ -60,17 +83,14 @@
 
       <div class="descBox">
         <div class="imgFrame">
-          <img src="https://cdn.shopify.com/s/files/1/0580/0506/1839/files/Size_Chart_480x480.jpg?v=1624999929" />
+          <img
+            src="https://cdn.shopify.com/s/files/1/0580/0506/1839/files/Size_Chart_480x480.jpg?v=1624999929"
+          />
         </div>
         <div class="desc">
           <div class="paragraph">
             <p>
-              Made with premium materials, these sunglasses are
-              stylish yet classic. The square frame will leave you a
-              deep impression at first sight. Designed with exquisite
-              metal hinges, this chic pair of sunglasses is extremely
-              versatile and comfortable. Spring hinges offer you a
-              comfortable fit.
+              {{ description }}
             </p>
             <div class="otherDetails">
               <div class="firstColumn">
@@ -111,14 +131,13 @@ export default {
       color: '',
       frameSize: '',
       ratingsAverage: '',
-      //   ratingsQuantity: '',
       price: '',
       priceDiscount: '',
       description: '',
       imageCover: null,
       images: [],
 
-      slides: ['First', 'Second', 'Third', 'Fourth'],
+      slides: ['First', 'Second', 'Third'],
       isInCart: false,
       cartText: 'Add To Cart',
       wishlistButton: false,
@@ -130,7 +149,6 @@ export default {
     this.getUsersWishlist();
   },
   methods: {
-    // Get Product By Id
     async getProductById() {
       try {
         const response = await axios.get(
@@ -155,64 +173,72 @@ export default {
       try {
         await axios.post(`http://localhost:3000/api/v1/cart/${id}`);
         this.isInCart = true;
-        this.cartText = 'Already in cart'
-        this.$router.replace('/shopping-cart')
+        this.cartText = 'Already in cart';
+        this.$router.replace('/shopping-cart');
       } catch (error) {
         console.log(error);
       }
     },
 
     checkCart() {
-      // fetch cart data from server
-      axios.get('http://localhost:3000/api/v1/cart').then(response => {
-        // check if product is already in cart
-        console.log(response.data.data.cartItems);
-        if (response.data.data.cartItems.some(p => p.eyeglasses === this.$route.params._id)) {
-          this.isInCart = true;
-          this.cartText = 'Already in cart'
-        }
-      });
+      axios
+        .get('http://localhost:3000/api/v1/cart')
+        .then((response) => {
+          console.log(response.data.data.cartItems);
+          if (
+            response.data.data.cartItems.some(
+              (p) => p.eyeglasses === this.$route.params._id
+            )
+          ) {
+            this.isInCart = true;
+            this.cartText = 'Already in cart';
+          }
+        });
     },
-    async addEyeglassToWishlistOrDeleteEyeglassFromWishlist(eyeglassesId) {
+    async addEyeglassToWishlistOrDeleteEyeglassFromWishlist(
+      eyeglassesId
+    ) {
       if (this.wishlistButton === false) {
         try {
-          await axios.post("http://localhost:3000/api/v1/wishlist", {
-            eyeglassesId: eyeglassesId
+          await axios.post('http://localhost:3000/api/v1/wishlist', {
+            eyeglassesId: eyeglassesId,
           });
           this.wishlistButton = true;
         } catch (error) {
           console.log(error);
         }
-      }
-      else if (this.wishlistButton === true) {
+      } else if (this.wishlistButton === true) {
         try {
-          await axios.delete(`http://localhost:3000/api/v1/wishlist/${eyeglassesId}`);
+          await axios.delete(
+            `http://localhost:3000/api/v1/wishlist/${eyeglassesId}`
+          );
           this.wishlistButton = false;
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
     },
     async getUsersWishlist() {
-      await axios.get('http://localhost:3000/api/v1/wishlist')
-        .then(response => {
+      await axios
+        .get('http://localhost:3000/api/v1/wishlist')
+        .then((response) => {
           const wishlist = response.data.data.wishlist;
           const eyeglasses = [];
           wishlist.forEach((item) => {
-            eyeglasses.push(item.eyeglasses._id)
-          })
-          this.wishlistButton = eyeglasses.includes(this.$route.params._id);
+            eyeglasses.push(item.eyeglasses._id);
+          });
+          this.wishlistButton = eyeglasses.includes(
+            this.$route.params._id
+          );
           console.log(response);
-          console.log(eyeglasses)
+          console.log(eyeglasses);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
-    }
-  }
-}
-
-
+    },
+  },
+};
 </script>
 
 <style lang="scss">

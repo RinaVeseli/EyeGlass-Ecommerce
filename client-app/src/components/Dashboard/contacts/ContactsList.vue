@@ -1,9 +1,6 @@
 <template>
   <router-view>
     <div class="flex-column">
-      <!-- <div class="mr-4">
-        <Sidebar />
-      </div> -->
       <div class="flex-column fill-height">
         <div class="d-flex style">
           <v-spacing><h1>Contacts List</h1></v-spacing>
@@ -29,6 +26,7 @@
               <th class="text-left">Material</th>
               <th class="text-left">Price</th>
               <th class="text-left">Description</th>
+              <th class="text-left">Type Of Contacts</th>
 
               <th class="text-left"></th>
             </tr>
@@ -40,6 +38,7 @@
               <td>{{ item.material }}</td>
               <td>{{ item.price }}</td>
               <td>{{ item.description }}</td>
+              <td>{{ item.type }}</td>
 
               <td>
                 <v-btn
@@ -122,7 +121,7 @@ export default {
 <style>
 .table-container {
   float: right;
-  width: 85%; /* adjust as needed */
+  width: 85%;
 }
 .style {
   padding: 60px;

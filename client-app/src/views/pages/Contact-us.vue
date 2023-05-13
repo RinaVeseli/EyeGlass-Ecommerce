@@ -54,7 +54,7 @@
         v-bind:error-messages="enquiryErrors"
       ></v-textarea>
       <div class="btns">
-        <v-btn @click="saveProduct" class="submitBtn"> Submit </v-btn>
+        <v-btn @click="saveMessage" class="submitBtn"> Submit </v-btn>
       </div>
     </v-form>
   </section>
@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     // Create New product
-    async saveProduct() {
+    async saveMessage() {
       this.nameErrors = [];
       this.numberErrors = [];
       this.emailErrors = [];
@@ -103,9 +103,7 @@ export default {
       if (!this.enquiry) {
         this.enquiryErrors.push('Price is required');
       }
-      if (!this.description) {
-        this.descriptionErrors.push('Description is required');
-      }
+
       if (
         this.nameErrors.length ||
         this.numberErrors.length ||

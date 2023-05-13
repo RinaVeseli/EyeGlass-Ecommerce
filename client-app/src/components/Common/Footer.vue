@@ -50,57 +50,43 @@
       <div class="footer">
         <div class="box-container">
           <div class="footerBbox">
-            <h3>CUSTOMER CARE</h3>
-            <router-link @click="scrollToTop()" to="/menu"
-              ><i class="fa-solid fa-circle-chevron-right"></i>
-              taco</router-link
-            >
-            <router-link @click="scrollToTop()" to="/menu"
-              ><i class="fa-solid fa-circle-chevron-right"></i>
-              burrito</router-link
-            >
-            <router-link @click="scrollToTop()" to="/menu"
-              ><i class="fa-solid fa-circle-chevron-right"></i>
-              nachos</router-link
-            >
-            <router-link @click="scrollToTop()" to="/menu"
-              ><i class="fa-solid fa-circle-chevron-right"></i> side
-              food
-            </router-link>
-            <router-link @click="scrollToTop()" to="/menu"
-              ><i class="fa-solid fa-circle-chevron-right"></i>
-              dessert</router-link
-            >
-            <router-link @click="scrollToTop()" to="/menu"
-              ><i class="fa-solid fa-circle-chevron-right"></i>
-              drink</router-link
-            >
-          </div>
-
-          <div class="footerBbox">
             <h3>QUICK LINKS</h3>
             <router-link @click="scrollToTop()" to="/">
               <i class="fa-solid fa-circle-chevron-right"></i>
-              home</router-link
+              Home</router-link
             >
             <router-link @click="scrollToTop()" to="/about">
               <i class="fa-solid fa-circle-chevron-right"></i>
-              about</router-link
+              About</router-link
             >
-            <router-link @click="scrollToTop()" to="/promotions">
+            <router-link @click="scrollToTop()" to="/contact-us">
               <i class="fa-solid fa-circle-chevron-right"></i>
-              promotions
+              Contact-us
             </router-link>
-            <router-link @click="scrollToTop()" to="/menu">
+            <router-link @click="scrollToTop()" to="/login">
               <i class="fa-solid fa-circle-chevron-right"></i>
-              menu</router-link
+              Login</router-link
             >
-            <router-link @click="scrollToTop()" to="/table">
-              <i class="fa-solid fa-circle-chevron-right"></i> book a
-              table
+            <router-link @click="scrollToTop()" to="/register">
+              <i class="fa-solid fa-circle-chevron-right"></i>
+              SignUp
             </router-link>
           </div>
-
+          <div class="footerBbox">
+            <h3>CUSTOMER CARE</h3>
+            <router-link @click="scrollToTop()" to="/glasses"
+              ><i class="fa-solid fa-circle-chevron-right"></i>
+              Eyeglasses</router-link
+            >
+            <router-link @click="scrollToTop()" to="/glasses"
+              ><i class="fa-solid fa-circle-chevron-right"></i>
+              Sunglasses</router-link
+            >
+            <router-link @click="scrollToTop()" to="/contacts"
+              ><i class="fa-solid fa-circle-chevron-right"></i>
+              Lenses</router-link
+            >
+          </div>
           <div class="footerBbox">
             <h3>SHOP WITH CINFIDENCE</h3>
             <P

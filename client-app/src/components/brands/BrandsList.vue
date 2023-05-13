@@ -3,20 +3,22 @@
     <div
       class="d-flex justify-space-around align-center flex-column fill-height"
     >
-      <v-spacing>List of Brands</v-spacing>
-      <div class="d-flex">
-        <v-btn
-          variant="outlined"
-          color="green"
-          class="mr-4 d-flex justify-flex-end float-right"
-          ><router-link
-            class="text-black"
-            :to="{ name: `Create` }"
-            color="white"
+      <div class="d-flex style">
+        <v-spacing><h1>List of Brands</h1></v-spacing>
+        <div class="d-flex">
+          <v-btn
+            variant="outlined"
+            color="green"
+            class="mr-4 d-flex justify-flex-end float-right"
+            ><router-link
+              class="text-black"
+              :to="{ name: `Create` }"
+              color="white"
+            >
+              Add New
+            </router-link></v-btn
           >
-            Add New
-          </router-link></v-btn
-        >
+        </div>
       </div>
       <v-table fixed-header height="600px">
         <thead>
@@ -108,3 +110,19 @@ export default {
   },
 };
 </script>
+<style>
+.table-container {
+  float: right;
+  width: 85%; /* adjust as needed */
+}
+.style {
+  padding: 60px;
+  width: 80%;
+  float: right;
+  justify-content: space-between;
+}
+.style h1 {
+  font-size: 32px;
+  margin-left: 60px;
+}
+</style>

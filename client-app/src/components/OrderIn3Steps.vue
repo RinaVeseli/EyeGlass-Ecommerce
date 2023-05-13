@@ -48,91 +48,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-          <div
-            class="homepage__order-wrapper"
-            style="min-height: 100%; border-top: 10px solid #89afe0"
-          >
-            <div style="padding: 24px">
-              <p
-                class="homepage__numbers"
-                style="
-                  margin-bottom: 12px;
-                  font-size: 36px;
-                  font-weight: 300;
-                  color: #2e2e2e;
-                "
-              >
-                02
-              </p>
-              <p
-                class="homepage__order-heading"
-                style="
-                  line-height: 28px;
-                  margin-bottom: 12px;
-                  font-size: 24px;
-                  font-weight: 700;
-                  color: #2e2e2e;
-                "
-              >
-                Enter quantity &amp; prescription
-              </p>
-              <p
-                style="
-                  margin-bottom: 0;
-                  font-size: 15px;
-                  color: #909090;
-                "
-              >
-                Upload your Rx, you can take a picture with your phone
-                or enter your prescription details manually.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
-          <div
-            class="homepage__order-wrapper"
-            style="min-height: 100%; border-top: 10px solid #0071bc"
-          >
-            <div style="padding: 24px">
-              <p
-                class="homepage__numbers"
-                style="
-                  margin-bottom: 12px;
-                  font-size: 36px;
-                  font-weight: 300;
-                  color: #2e2e2e;
-                "
-              >
-                03
-              </p>
-              <p
-                class="homepage__order-heading"
-                style="
-                  line-height: 28px;
-                  margin-bottom: 12px;
-                  font-size: 24px;
-                  font-weight: 700;
-                  color: #2e2e2e;
-                "
-              >
-                Place your order
-              </p>
-              <p
-                style="
-                  margin-bottom: 0;
-                  font-size: 15px;
-                  color: #909090;
-                "
-              >
-                To make it even easier, sign up for autoship and get
-                your contacts automatically delivered to you. Let us
-                do the work for you!
-              </p>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </section>
@@ -154,7 +69,6 @@ export default {
   },
 
   methods: {
-    // Get All Products
     async getProducts() {
       try {
         const response = await axios.get(

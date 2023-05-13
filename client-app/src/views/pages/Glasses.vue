@@ -1,9 +1,14 @@
 <template>
   <Header />
+  <div v-if="isLoading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading...</span>
+  </div>
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
   />
+
   <div class="mainDiv">
     <section class="glasseslist">
       <div class="sidebar-accordion">
@@ -28,6 +33,7 @@
             :class="{ active: activeAccordion === filter.id }"
           >
             <label
+              class="filter"
               v-for="(option, index) in filter.options"
               :key="index"
             >
@@ -46,10 +52,22 @@
     <section>
       <div class="topPhoto">
         <img
-          style="width: 100%"
+          style="
+            width: 100%;
+            box-shadow: 1px 6px 5px -3px rgba(150, 150, 150, 1);
+          "
           src="https://marveloptics.com/wp-content/uploads/2019/06/MO_Page_Banner_1.png"
         />
       </div>
+      <div class="sorting">
+        <label for="brand">Sort by: </label>
+        <select v-model="sortOrder" id="brand" @change="getProducts">
+          <option value=""></option>
+          <option value="price">Price: Low to High</option>
+          <option value="-price">Price: High to Low</option>
+        </select>
+      </div>
+
       <div class="product-list">
         <GlassCard
           v-for="data in items"
@@ -78,14 +96,32 @@ export default {
     return {
       items: [],
       cartItems: [],
-      // brand: '',
-      // brandId: '',
+      brands: [],
+      brandIds: {},
+      isLoading: true,
       activeAccordion: null,
       filters: [
         {
+          id: 'type',
+          name: 'Type of Glasses',
+          options: ['EYEGLASSES', 'SUNGLASSES'],
+        },
+        {
           id: 'color',
           name: 'Color',
-          options: ['gfdasfbvfd', 'Brown', 'Silver', 'Gold', 'Red'],
+          options: [
+            'Beige',
+            'Black',
+            'Blue',
+            'Brown',
+            'Crystal',
+            'Gold',
+            'Grey',
+            'Red',
+            'Violet',
+            'Yellow',
+            'Multicolor',
+          ],
         },
         {
           id: 'shape',
@@ -108,23 +144,19 @@ export default {
           name: 'Gender',
           options: ['Men', 'Women', 'Unisex'],
         },
-        {
-          id: 'name',
-          name: 'Name',
-          options: ['Migdalia', 'Women', 'Unisex'],
-        },
       ],
       selectedFilters: {
         color: [],
         shape: [],
         brand: [],
+        type: [],
         gender: [],
-        name: [],
       },
     };
   },
   created() {
     this.getProducts();
+    this.fetchBrands();
   },
   methods: {
     toggleAccordion(id) {
@@ -133,6 +165,24 @@ export default {
     addToCart(product) {
       this.cartItems.push(product);
     },
+    async fetchBrands() {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/v1/brands'
+        );
+        const brands = response.data.data.brands;
+
+        this.brands = brands.map((brand) => brand.name);
+
+        for (const brand of brands) {
+          this.brandIds[brand.name] = brand._id;
+          console.log(this.brandIds[brand.name]);
+        }
+        this.getProducts();
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async getProducts() {
       try {
         const response = await axios.get(
@@ -140,61 +190,52 @@ export default {
           {
             params: {
               color: this.selectedFilters.color,
-              brand: this.selectedFilters.brand,
-              name: this.selectedFilters.name,
+              type: this.selectedFilters.type,
+              brand: this.brandIds[this.selectedFilters.brand],
+              gender: this.selectedFilters.gender,
+              shape: this.selectedFilters.shape,
+              sort: this.sortOrder,
             },
           }
         );
-
         this.items = response.data.data.data;
-
-        // filter items by selected filters
-        for (const filterId in this.selectedFilters) {
-          const selectedOptions = this.selectedFilters[filterId];
-          if (selectedOptions.length > 0) {
-            // if (filterId === 'brandId') {
-            //   this.items = this.items.filter((item) => {
-            //     return item.brand._id === selectedOptions;
-            //   });
-            // } else {
-            this.items = this.items.filter((item) => {
-              return selectedOptions.includes(item[filterId]);
-            });
-          }
-          // }
-        }
-
-        console.log(this.items);
       } catch (err) {
         console.log(err);
       }
     },
   },
   mounted() {
-    this.getProducts();
-
-    // axios
-    //   .get('http://localhost:3000/api/v1/brands')
-    //   .then((response) => {
-    //     this.brands = response.data.data.brands.map(
-    //       (brand) => brand.name
-    //     );
-    //     console.log(this.brands);
-    //     // update the "Brand" filter options with the fetched brands
-    //     const brandFilter = this.filters.find(
-    //       (f) => f.id === 'brand'
-    //     );
-    //     brandFilter.options = this.brands;
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    setTimeout(() => {
+      this.isLoading = false;
+      this.$nextTick(() => {
+        this.$el.querySelector('.mainDiv').classList.add('loaded');
+      });
+    }, 500);
+    axios
+      .get('http://localhost:3000/api/v1/brands')
+      .then((response) => {
+        this.brands = response.data.data.brands.map(
+          (brand) => brand.name
+        );
+        console.log(this.brands);
+        const brandFilter = this.filters.find(
+          (f) => f.id === 'brand'
+        );
+        brandFilter.options = this.brands;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>
 <style>
 .mainDiv {
   display: flex;
+}
+.sorting {
+  text-align: end;
+  margin: 10px 20px 0px 0px;
 }
 .sidebar-accordion {
   width: 300px;
@@ -206,11 +247,19 @@ export default {
   font-weight: 400;
   margin-bottom: 20px;
 }
-
+.filter {
+  display: block;
+  margin-bottom: 5px;
+}
 .accordion-item {
   margin-bottom: 10px;
 }
-
+#brand {
+  padding: 5px;
+  border: solid rgb(191, 191, 191) 1px;
+  border-radius: 5px;
+  box-shadow: 1px 9px 300px -5px rgba(191, 189, 191, 1);
+}
 .accordion-header {
   display: flex;
   justify-content: space-between;
@@ -238,11 +287,6 @@ export default {
 
 .accordion-body.active {
   display: block;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
 }
 
 /* The glasseslist */

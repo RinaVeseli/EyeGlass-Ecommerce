@@ -55,14 +55,12 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 exports.getAbouts = catchAsync(async (req, res, next) => {
-  //Excecute Query
   const features = new APIFeatures(About.find(), req.query)
     .filter()
     .sort()
     .limitFields()
     .paginate();
   const abouts = await features.query;
-  //Send Response
   res.status(200).json({
     status: 'success',
     results: abouts.length,

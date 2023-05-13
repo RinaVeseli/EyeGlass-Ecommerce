@@ -10,13 +10,12 @@ const routes = [
       import(
         /* webpackChunkName: "Home" */ '../views/pages/HomePage.vue'
       ),
+    props: true,
   },
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+
     component: () =>
       import(
         /* webpackChunkName: "about" */ '../views/pages/About.vue'
@@ -25,9 +24,7 @@ const routes = [
   {
     path: '/contacts',
     name: 'contacts',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+
     component: () =>
       import(
         /* webpackChunkName: "contacts" */ '../views/pages/Contacts.vue'
@@ -36,9 +33,7 @@ const routes = [
   {
     path: `/contacts/contacts-details/:_id`,
     name: 'contacts-details',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+
     component: () =>
       import(
         /* webpackChunkName: "contacts" */ '../views/pages/ContactsDetails.vue'
@@ -71,15 +66,7 @@ const routes = [
         /* webpackChunkName: "portfolio"  */ '../views/pages/Contact-us.vue'
       ),
   },
-  // {
-  //   path: '/create',
-  //   name: 'Create',
-  //   component: () =>
-  //     import(
-  //       /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
-  //     ),
-  //   meta: { isAdmin: true },
-  // },
+
   {
     path: '/header',
     name: 'Header',
@@ -135,6 +122,7 @@ const routes = [
       import(
         /* webpackChunkName: "shoppingCart" */ '../views/pages/ShoppingCart.vue'
       ),
+      meta: {isAuthenticated: true},
   },
   {
     path: '/orders',
@@ -143,6 +131,7 @@ const routes = [
       import(
         /* webpackChunkName: "ordersList" */ '../views/user/OrdersList.vue'
       ),
+      meta: {isAuthenticated: true},
   },
   {
     path: '/wishlist',
@@ -151,10 +140,12 @@ const routes = [
       import(
         /* webpackChunkName: "wishlist" */ '../views/user/Wishlist.vue'
       ),
+      meta: {isAuthenticated: true},
   },
   {
     path: '/dashboard',
     name: 'dashboard',
+    meta: { isAdmin: true },
     component: () =>
       import(
         /* webpackChunkName: "login" */ '../views/pages/Dashboard/DashboardHome.vue'
@@ -177,6 +168,7 @@ const routes = [
             /* webpackChunkName: "AboutList" */ '../components/about/AboutList.vue'
           ),
         props: true,
+        meta: { isAdmin: true },
       },
       {
         path: `EditAbout/:_id`,
@@ -186,6 +178,7 @@ const routes = [
             /* webpackChunkName: "Edit" */ '../components/about/EditAbout.vue'
           ),
         props: true,
+        meta: { isAdmin: true },
       },
       {
         path: 'brand/brand-list',
@@ -194,6 +187,7 @@ const routes = [
           import(
             /* webpackChunkName: "Home" */ '../components/brands/BrandsList.vue'
           ),
+        meta: { isAdmin: true },
       },
       {
         path: 'brand/create',
@@ -202,6 +196,7 @@ const routes = [
           import(
             /* webpackChunkName: "create" */ '../components/brands/AddBrand.vue'
           ),
+        meta: { isAdmin: true },
       },
       {
         path: `brand/edit/:_id`,
@@ -210,6 +205,7 @@ const routes = [
           import(
             /* webpackChunkName: "Edit" */ '../components/brands/EditBrand.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'eyeglasses/eyeglasses-list',
@@ -218,6 +214,7 @@ const routes = [
           import(
             /* webpackChunkName: "Home" */ '../components/eyeglasses/EyeglassesList.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'eyeglasses/create',
@@ -226,6 +223,7 @@ const routes = [
           import(
             /* webpackChunkName: "create" */ '../components/eyeglasses/AddEyeglasses.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: `eyeglasses/editEyeglasses/:_id`,
@@ -234,6 +232,7 @@ const routes = [
           import(
             /* webpackChunkName: "EditEye" */ '../components/eyeglasses/EditEyeglasses.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'contacts/contacts-list',
@@ -242,6 +241,7 @@ const routes = [
           import(
             /* webpackChunkName: "ContactsList" */ '../components/Dashboard/contacts/ContactsList.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'contacts/create',
@@ -250,6 +250,7 @@ const routes = [
           import(
             /* webpackChunkName: "AddContacts" */ '../components/Dashboard/contacts/AddContacts.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: `contacts/editContacts/:_id`,
@@ -258,6 +259,7 @@ const routes = [
           import(
             /* webpackChunkName: "EditContacts" */ '../components/Dashboard/contacts/EditContacts.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'orderSteps',
@@ -266,6 +268,7 @@ const routes = [
           import(
             /* webpackChunkName: "OrderSteps" */ '../components/Dashboard/orderSteps/OrderSteps.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'orderSteps/create',
@@ -274,6 +277,7 @@ const routes = [
           import(
             /* webpackChunkName: "CreateOrderStep" */ '../components/Dashboard/orderSteps/AddOrderSteps.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: `orderSteps/editOrderStep/:_id`,
@@ -282,6 +286,7 @@ const routes = [
           import(
             /* webpackChunkName: "EditOrderStep" */ '../components/Dashboard/orderSteps/EditOrderStep.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'faqs',
@@ -290,6 +295,7 @@ const routes = [
           import(
             /* webpackChunkName: "Faqs" */ '../components/Dashboard/Faqs/FaqList.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'faqs/create',
@@ -298,6 +304,7 @@ const routes = [
           import(
             /* webpackChunkName: "CreateFaq" */ '../components/Dashboard/Faqs/AddFaq.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: `faqs/editFaqs/:_id`,
@@ -306,6 +313,7 @@ const routes = [
           import(
             /* webpackChunkName: "EditFaq" */ '../components/Dashboard/Faqs/EditFaq.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'shapes',
@@ -314,6 +322,7 @@ const routes = [
           import(
             /* webpackChunkName: "Faqs" */ '../components/Dashboard/shape/ShapeList.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'shapes/create',
@@ -322,7 +331,7 @@ const routes = [
           import(
             /* webpackChunkName: "CreateFaq" */ '../components/Dashboard/shape/AddShape.vue'
           ),
-        meta: { requiresAuth: true },
+          meta: { isAdmin: true },
       },
       {
         path: `shapes/editShapes/:_id`,
@@ -331,6 +340,7 @@ const routes = [
           import(
             /* webpackChunkName: "EditFaq" */ '../components/Dashboard/shape/EditShape.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: 'contacts',
@@ -339,6 +349,7 @@ const routes = [
           import(
             /* webpackChunkName: "Faqs" */ '../components/Dashboard/contactus/ContactList.vue'
           ),
+          meta: { isAdmin: true },
       },
       {
         path: `users`,
@@ -347,6 +358,16 @@ const routes = [
           import(
             /* webpackChunkName: "Users" */ '../components/users/UsersList.vue'
           ),
+          meta: { isAdmin: true },
+      },
+      {
+        path: 'reviews',
+        name: 'reviews',
+        component: () =>
+          import(
+            /* webpackChunkName: "reviews" */ '../views/user/Reviews.vue'
+          ),
+          meta: { isAdmin: true },
       },
     ],
   },
@@ -393,6 +414,7 @@ router.beforeEach((to, from, next) => {
         }
       }
     } else {
+      window.scrollTo(0, 0);
       next();
     }
   });
